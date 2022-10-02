@@ -4,3 +4,4 @@ language = "en"
 multilingual = false
 src = "src"
 title = "Bullet Ballistics"
+description = "Documentation for the BulletBallistics unity asset."
