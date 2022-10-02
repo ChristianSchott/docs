@@ -1,0 +1,6 @@
+[book]
+authors = ["ChristianSchott"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Documentations"

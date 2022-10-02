@@ -3,13 +3,13 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Getting Started - Bullet Ballistics</title>
+        <title>Contact - Documentations</title>
 
 
         <!-- Custom HTML head -->
         
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="Documentation for the BulletBallistics unity asset.">
+        <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="getting_started.html" class="active"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="environment.html"><strong aria-hidden="true">2.</strong> Environment Provider</a></li><li class="chapter-item expanded "><a href="bullet.html"><strong aria-hidden="true">3.</strong> Visual Bullet Providers</a></li><li class="chapter-item expanded "><a href="impact.html"><strong aria-hidden="true">4.</strong> Impact Handlers</a></li><li class="chapter-item expanded "><a href="material.html"><strong aria-hidden="true">5.</strong> Ballistic Materials</a></li><li class="chapter-item expanded "><a href="settings.html"><strong aria-hidden="true">6.</strong> Ballistic Settings</a></li><li class="chapter-item expanded "><a href="bullet_info.html"><strong aria-hidden="true">7.</strong> Bullet Info</a></li><li class="chapter-item expanded "><a href="wind.html"><strong aria-hidden="true">8.</strong> Wind Provider</a></li><li class="chapter-item expanded "><a href="weapon.html"><strong aria-hidden="true">9.</strong> Weapon</a></li><li class="chapter-item expanded "><a href="zeroing.html"><strong aria-hidden="true">10.</strong> Scope Zeroing Generator</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="contact.html">Contact</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="assets.html"><strong aria-hidden="true">1.</strong> Unity Assets</a></li><li class="chapter-item expanded "><a href="contact.html" class="active"><strong aria-hidden="true">2.</strong> Contact</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -110,7 +110,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">Bullet Ballistics</h1>
+                    <h1 class="menu-title">Documentations</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -142,70 +142,22 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
-<p>Check out the included example scene in the <code>Ballistics/Example/</code> folder.</p>
-<h2 id="minimal-setup"><a class="header" href="#minimal-setup">Minimal Setup</a></h2>
+                        <h1 id="contact"><a class="header" href="#contact">Contact</a></h1>
+<p>Any questions or suggestions?</p>
 <ul>
-<li>create a <code>Assets/Create/Ballistics/Ballistic Settings</code> object in your project folder</li>
-<li>add an empty game object to your scene and attach a <code>Environment Provider</code> component to it
-<ul>
-<li>assign the <code>Ballistic Settings</code> object you have created before</li>
+<li>Christian Schott</li>
+<li>E-Mail: <a href="mailto:mr3d.cs@gmail.com">mr3d.cs@gmail.com</a></li>
+<li>YouTube: <a href="https://www.youtube.com/channel/UC2-tdH9kaJTJ36vbzB31fbg">https://www.youtube.com/channel/UC2-tdH9kaJTJ36vbzB31fbg</a></li>
 </ul>
-</li>
-<li>attach a <code>Weapon</code> component to a weapon in your scene
-<ul>
-<li>assign a transform at the end of the weapon barrel as the <code>Bullet Spawn Point</code> (z-axis pointing forward)</li>
-<li>create a <code>Assets/Create/Ballistics/Bullet Info</code> object in your project folder</li>
-<li>assign this <code>Bullet Info</code> object in the <code>Weapon</code> component</li>
-</ul>
-</li>
-<li>calling <code>Shoot()</code> on the <code>Weapon</code> component will fire a bullet (you can use the <code>Simple Weapon Input</code> component, to shoot  when clicking the left mouse button)</li>
-</ul>
-<p><strong>Note!</strong> As so far no impact handler or visual bullet provider is set up, you will <em>NOT</em> see the bullet or any impacts!</p>
-<h2 id="visual-bullet-provider"><a class="header" href="#visual-bullet-provider">Visual Bullet Provider</a></h2>
-<p>Bullet Ballistics separates the ballistics simulation from the visual projectiles flying through the scene.
-This allows to optimize the rendering when thousands of projectiles are active simultaneously, and allows you to customize the rendering to your needs.</p>
-<ul>
-<li>create a <code>Assets/Create/Ballistics/Visual Bullet Providers/Pooled Bullet Provider</code> object, and assign a bullet prefab with a <code>Pooled Bullet</code> component attached</li>
-<li>assign the new <code>Pooled Bullet Provider</code> object to the <code>Visual Bullet Provider</code> field of your weapon</li>
-</ul>
-<p>You should now be able to see the bullet prefab when shooting the weapon.</p>
-<h2 id="impact-handler"><a class="header" href="#impact-handler">Impact Handler</a></h2>
-<p>Similar to the <code>Visual Bullet Provider</code> the <code>Impact Handler</code> allows you to customize what should happen on a projectile impact.</p>
-<ul>
-<li>create a <code>Assets/Create/Ballistics/Impact Handler/Generic Impact Handler</code> object in your project folder
-<ul>
-<li>assign the impact handler object to the <code>Global Impact Handler</code> field of your <code>Environment Provider</code> component</li>
-</ul>
-</li>
-<li>enabling <code>Handle Rigidbody Forces</code> should cause rigidbodies to be affected by projectile impacts</li>
-<li>adding a audio clip to the <code>Impact Sounds</code> list, will cause an impact sound at any impact of a projectile with the scene</li>
-</ul>
-<h2 id="ballistic-materials"><a class="header" href="#ballistic-materials">Ballistic Materials</a></h2>
-<p>Ballistic Material define how a projectile will behave when interacting with a collider.</p>
-<ul>
-<li>create a <code>Assets/Create/Ballistic/Ballistic Material</code> object in your project folder
-<ul>
-<li>a Ballistic Material is a unity <code>Physic Material</code> with an associated <code>Ballistic Material</code> object</li>
-<li>you can promote/demote a <code>Physic Material</code> to/from a <code>Ballistic Material</code> by right-clicking the <code>Physic Material</code> and selecting <code>Assets/Create/Ballistics/To BallisticMaterial</code> / <code>Unlink BallisticMaterial</code></li>
-</ul>
-</li>
-<li>assign a Ballistic Material to a collider by setting the <code>Material</code> field of the collider to a <code>Physic Material</code> associated with a <code>Ballistic Material</code> object</li>
-<li>by change the properties of the Ballistic Material to alter the bullet interactions</li>
-</ul>
-<p>For more information on each of these topics check out the following chapters.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="assets.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="environment.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -213,13 +165,10 @@ This allows to optimize the rendering when thousands of projectiles are active s
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="assets.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="environment.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
             </nav>
 
         </div>

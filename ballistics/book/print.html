@@ -82,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Environment Provider</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Visual Bullet Providers</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Impact Handlers</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Ballistic Materials</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> Ballistic Settings</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">7.</strong> Bullet Info</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">8.</strong> Weapon</div></li><li class="chapter-item expanded "><div><strong aria-hidden="true">9.</strong> Scope Zeroing Generator</div></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="contact.html">Contact</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="environment.html"><strong aria-hidden="true">2.</strong> Environment Provider</a></li><li class="chapter-item expanded "><a href="bullet.html"><strong aria-hidden="true">3.</strong> Visual Bullet Providers</a></li><li class="chapter-item expanded "><a href="impact.html"><strong aria-hidden="true">4.</strong> Impact Handlers</a></li><li class="chapter-item expanded "><a href="material.html"><strong aria-hidden="true">5.</strong> Ballistic Materials</a></li><li class="chapter-item expanded "><a href="settings.html"><strong aria-hidden="true">6.</strong> Ballistic Settings</a></li><li class="chapter-item expanded "><a href="bullet_info.html"><strong aria-hidden="true">7.</strong> Bullet Info</a></li><li class="chapter-item expanded "><a href="wind.html"><strong aria-hidden="true">8.</strong> Wind Provider</a></li><li class="chapter-item expanded "><a href="weapon.html"><strong aria-hidden="true">9.</strong> Weapon</a></li><li class="chapter-item expanded "><a href="zeroing.html"><strong aria-hidden="true">10.</strong> Scope Zeroing Generator</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="contact.html">Contact</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -217,6 +217,139 @@ This allows to optimize the rendering when thousands of projectiles are active s
 <li>by change the properties of the Ballistic Material to alter the bullet interactions</li>
 </ul>
 <p>For more information on each of these topics check out the following chapters.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="environment-provider"><a class="header" href="#environment-provider">Environment Provider</a></h1>
+<p>Each scene using Bullet Ballistics should have a single game object with a <code>Environment Provider</code> component attached.</p>
+<p>The <code>Environment Provider</code> configures the ballistic simulation setting for the current scene.
+Including:</p>
+<ul>
+<li>Ballistic Settings</li>
+<li>Wind Velocity</li>
+<li>Global Impact Handler</li>
+<li>Bullet Path Debugging (Editor only)</li>
+</ul>
+<p>In theory these settings can also be adjusted manually in the static <code>Ballistics.Core</code> class.
+The <code>Environment Provider</code> automatically configures the <code>Ballistics.Core</code> on startup/ scene change.</p>
+<p>When modifying the <code>Environment Provider</code> properties at runtime, make sure to enable <code>Continuous Environment Update</code> to ensure, the <code>Ballistics.Core</code> is updated too.</p>
+<p>The fields of the <code>Environment Provider</code> will be explained further in the respective chapters.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="visual-bullet-provider-1"><a class="header" href="#visual-bullet-provider-1">Visual Bullet Provider</a></h1>
+<p>A <code>Visual Bullet Provider</code> is just a scriptable object, with a <code>GetVisualBullet()</code> method, which returns a new <code>IVisualBullet</code>.</p>
+<pre><code class="language-C#">public abstract class VisualBulletProviderObject : InitializableScriptableObject
+{
+    public abstract IVisualBullet GetVisualBullet();
+}
+</code></pre>
+<p>The <code>IVisualBullet</code> interface consists of:</p>
+<pre><code class="language-C#">public interface IVisualBullet
+{
+    void InitializeBullet(in BulletPose pose, in float3 visualOffset);  // start of ballistic simulation
+    void UpdateBullet(in BulletPose pose);                              // pose update, each simulation cycle
+    void DestroyBullet();                                               // bullet has been destroyed (stopped or timeout)          
+}
+</code></pre>
+<p>The <code>visualOffset</code> argument of <code>InitializeBullet()</code> will be explained further in the chapter about the <a href="./weapon.html">Weapon</a> component.</p>
+<p>The <code>Visual Bullet Provider</code> adds a layer of abstraction between the simulation and the rendering.
+This allows switching between rendering strategies easily.</p>
+<p>For example, the <code>Pooled Bullet Provider</code> uses basic prefab instanciation for rendering the visual bullet (+ pooling instead of destroying bullets, to minimize garbage collection overhead).</p>
+<p>Switching the visual bullet of a <code>Weapon</code> to the <code>Tracer Bullet Provider</code> can be done, by simply replacing the <code>Visual Bullet Provider</code> of the <code>Weapon</code> component.
+The <code>Tracer Bullet Provider</code> draws bullets, by rendering a trail between the last three bullet positions.
+The <code>Tracer Bullet Provider</code> can render bullets very efficiently, as it is able to combine ~10.000 bullets into a single draw call. </p>
+<p>With this flexibility it is very easy to create your own <code>Visual Bullet Provider</code>s which fit your game's requirements optimally!</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="impact-handler-1"><a class="header" href="#impact-handler-1">Impact Handler</a></h1>
+<p>Similar to a <code>Visual Bullet Provider</code> a <code>Impact Handler</code> is also a scriptable object, which adds a layer of abstraction between the ballistic simulation and the rest of your game.</p>
+<pre><code class="language-C#">public abstract class ImpactHandlerObject : InitializableScriptableObject, IImpactHandler
+{
+    public abstract HandledFlags HandleSurfaceInteraction(in SurfaceInteractionInfo impact, HandledFlags flags);
+    public abstract HandledFlags HandleImpact(in ImpactInfo impact, HandledFlags flags);
+}
+</code></pre>
+<ul>
+<li><code>HandleSurfaceInteraction</code> is called whenever a projectile first enters, ricochets, exits, or stops inside of a collider</li>
+<li><code>HandleImpact</code> is called when a projectile penetrates a collider</li>
+</ul>
+<p>Similar to the <code>Pooled Bullet Provider</code> the <code>Pooled Impact Instantiator</code> instantiates a prefab with an attached <code>Impact Object</code> component at a surface interaction (and pooles the instantiated prefabs).</p>
+<p>Alternatively, the <code>Generic Impact Handler</code> provides default handling for rigidbody interactions, a damage system, and audio effects.</p>
+<h2 id="chain-of-responsibility"><a class="header" href="#chain-of-responsibility">Chain Of Responsibility</a></h2>
+<p>As some bullet interactions might be specific to the bullet, material, or collider, the <code>Impact Handler</code> system is structured hierarchically.</p>
+<p>The <code>Bullet Info</code>, <code>Ballistic Material</code>, <code>Environemnt Provider</code>, and collider can each provide an <code>Impact Handler</code>.
+When a bullet hits a collider the impact handlers are called (if present) in this order:</p>
+<ul>
+<li><code>Bullet Info</code> specific <code>Impact Handler</code></li>
+<li><code>Ballistic Material</code> specific <code>Impact Handler</code></li>
+<li>global impact handler provided by the <code>Environment Provider</code></li>
+</ul>
+<p>The collider specific <code>Impact Handler</code> is not called by default, as this requires a <code>GetComponent</code> call!
+You can query for a collider specific <code>Impact Handler</code> inside any of the above impact handling stages, by trying to get a component inheriting the <code>IImpactHandler</code> interface and calling the specific handler.</p>
+<p>When collider specific a <code>Impact Handler</code> is needed globally, you can use a <code>Generic Impact Handler</code> as the global <code>Impact Handler</code>, and enable <code>CheckForPerColliderHandler</code>.</p>
+<p>At each step of the <code>Impact Handler</code> chain you receive the <code>HandledFlags</code> of the previous handlers, and can return which flags have been handled by the current handler.
+This allows, for example, a bullet impact handler to override the bullet hole prefab of the global impact handler, or a material impact handler to alter the impact sound effect.</p>
+<h2 id="impact-info"><a class="header" href="#impact-info">Impact Info</a></h2>
+<pre><code class="language-C#">public readonly struct SurfaceInteractionInfo
+{
+    public enum InteractionType
+    {
+        STOP,
+        ENTER,
+        RICOCHET,
+        EXIT,
+    }
+    public readonly InteractionType Type;
+    public readonly RaycastHit HitInfo;
+    public readonly float3 Velocity;
+    public readonly float SpreadAngle;
+    public readonly float SpeedFactor;      // percentage of speed lost on ricochet
+    public readonly BulletInfo BulletInfo;
+    public readonly Weapon Weapon;
+}
+
+public readonly struct ImpactInfo
+{
+    public readonly RaycastHit HitInfo;
+    public readonly float3 EntryVelocity;
+    public readonly float ImpactDepth;
+    public readonly float EnergyLossPerUnit;
+    public readonly BulletInfo BulletInfo;
+    public readonly Weapon Weapon;
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ballistic-material"><a class="header" href="#ballistic-material">Ballistic Material</a></h1>
+<p>A <code>Ballistic Material</code> specifies how a projectile interacts with a collider.</p>
+<p>Custom <code>Ballistic Materials</code> can be created by implementing the <code>IBallisticMaterial</code> interface, and associating them with a <code>Physic Material</code> at runtime, by adding them to the <code>BallisticMaterialCache</code>.</p>
+<p>However, for must cases it will be sufficient to create a <code>Ballistic Material</code> scriptable object via <code>Assets/Create/Ballistics/Ballistic Material</code>.
+These will be associated with a <code>Physic Material</code> automatically.</p>
+<pre><code class="language-C#">public interface IBallisticMaterial
+{
+    MaterialImpact HandleImpact(in float3 velocity, BulletInfo info, in RaycastHit rayHit);
+    float GetEnergyLossPerUnit();
+    float GetSpreadAngle();
+    IImpactHandler GetImpactHandler();
+}
+</code></pre>
+<p>Combining <code>Ballistic Material</code>s with unity's <code>Physic Material</code>s has the advantage that unity directly provides the <code>Physic Material</code> of the hit collider from a raycast query, so no <code>GetComponent</code> call to something like a <em><code>Ballistic Material Provider</code></em> component on the object is required, which would come with a performance impact.</p>
+<p>The main method of the <code>IBallisticMaterial</code> interface is <code>HandleImpact</code>.
+It provides all the available information about the impact, and the <code>Ballistic Material</code> decides how the projectile should continue, by returning a <code>MaterialImpact</code> struct.</p>
+<pre><code class="language-C#">public readonly struct MaterialImpact
+{
+    public enum Result
+    {
+        STOP,
+        ENTER,
+        RICOCHET
+    }
+    public readonly Result ImpactResult;
+    public readonly float SpreadAngle;
+    public readonly float SpeedFactor;
+}
+</code></pre>
+<p>The bullet can either be stopped right away, be reflected (ricochet), or penetrate (enter) the collider.
+The <code>SpeedFactor</code> is multiplied with the current bullet velocity to result in the new bullet velocity.</p>
+<p>The <code>SpreadAngle</code> only applies to <code>Ricochet</code> bullets. 
+When a bullet penetrates a collider, the spread is applied on the exit and is determined by the <code>GetSpreadAngle</code> method.</p>
+<p>For additional information about the <code>Ballistic Material</code> object fields, please refer to the inspector tooltips.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ballistic-settings"><a class="header" href="#ballistic-settings">Ballistic Settings</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="bullet-info"><a class="header" href="#bullet-info">Bullet Info</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="wind-provider"><a class="header" href="#wind-provider">Wind Provider</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="weapon"><a class="header" href="#weapon">Weapon</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="scope-zeroing-generator"><a class="header" href="#scope-zeroing-generator">Scope Zeroing Generator</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="contact"><a class="header" href="#contact">Contact</a></h1>
 <p>Any questions or suggestions?</p>
 <ul>
