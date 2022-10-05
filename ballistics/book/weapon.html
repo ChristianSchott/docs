@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="environment.html"><strong aria-hidden="true">2.</strong> Environment Provider</a></li><li class="chapter-item expanded "><a href="bullet.html"><strong aria-hidden="true">3.</strong> Visual Bullet Providers</a></li><li class="chapter-item expanded "><a href="impact.html"><strong aria-hidden="true">4.</strong> Impact Handlers</a></li><li class="chapter-item expanded "><a href="material.html"><strong aria-hidden="true">5.</strong> Ballistic Materials</a></li><li class="chapter-item expanded "><a href="settings.html"><strong aria-hidden="true">6.</strong> Ballistic Settings</a></li><li class="chapter-item expanded "><a href="bullet_info.html"><strong aria-hidden="true">7.</strong> Bullet Info</a></li><li class="chapter-item expanded "><a href="wind.html"><strong aria-hidden="true">8.</strong> Wind Provider</a></li><li class="chapter-item expanded "><a href="weapon.html" class="active"><strong aria-hidden="true">9.</strong> Weapon</a></li><li class="chapter-item expanded "><a href="zeroing.html"><strong aria-hidden="true">10.</strong> Scope Zeroing Generator</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="contact.html">Contact</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="getting_started.html"><strong aria-hidden="true">1.1.</strong> Getting Started</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Behaviour Objects</li><li class="chapter-item expanded "><a href="bullet.html"><strong aria-hidden="true">2.</strong> Visual Bullet Providers</a></li><li class="chapter-item expanded "><a href="impact.html"><strong aria-hidden="true">3.</strong> Impact Handlers</a></li><li class="chapter-item expanded affix "><li class="part-title">Components</li><li class="chapter-item expanded "><a href="environment.html"><strong aria-hidden="true">4.</strong> Environment Provider</a></li><li class="chapter-item expanded "><a href="weapon.html" class="active"><strong aria-hidden="true">5.</strong> Weapon</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="zeroing.html"><strong aria-hidden="true">5.1.</strong> Zeroing Crosshair Generator</a></li><li class="chapter-item expanded "><a href="weapon_controller.html"><strong aria-hidden="true">5.2.</strong> Weapon Controller</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Data Objects</li><li class="chapter-item expanded "><a href="material.html"><strong aria-hidden="true">6.</strong> Ballistic Materials</a></li><li class="chapter-item expanded "><a href="settings.html"><strong aria-hidden="true">7.</strong> Ballistic Settings</a></li><li class="chapter-item expanded "><a href="bullet_info.html"><strong aria-hidden="true">8.</strong> Bullet Info</a></li><li class="chapter-item expanded affix "><a href="contact.html">Contact</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -143,12 +143,38 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="weapon"><a class="header" href="#weapon">Weapon</a></h1>
+<p>The <code>Weapon</code> component is usually the main entry-point for interacting with the ballistics simulation.</p>
+<p>It is mainly just a convenience component, that allows you to combine a <code>Bullet Info</code>, <code>Visual Bullet Provider</code>, and spawn point transform, so you only have to call <code>Weapon.Shoot()</code> to fire a bullet. </p>
+<h2 id="visual-vs-bullet-spawn-point"><a class="header" href="#visual-vs-bullet-spawn-point">Visual vs. Bullet Spawn Point</a></h2>
+<p>The <code>Weapon</code> component exposes two spawn point transforms, the <code>Bullet Spawn Point</code> and <code>Visual Spawn Point</code>.</p>
+<ul>
+<li><code>Bullet Spawn Point</code> is the position used for the internal ballistics simulation and collision detection (z-axis of the transform pointing forward)</li>
+<li><code>Visual Spawn Point</code> provides the initial position for the <code>Visual Bullet</code> (if present)</li>
+</ul>
+<p>This distinction is often useful for first person shooter games, because the hit detection should usually originate from the center of the camera, while the visual bullet representation should appear to originate at the end of the weapon's barrel.</p>
+<p>This obviously causes a discrepancy between the visual bullet and the internal hit detection.
+To mitigate this offset, Bullet Ballistics automatically moves the visual bullet position towards the internal bullet position over a given distance set in the <code>BallisticSettings</code> <code>Visual To Physical Distance</code>.</p>
+<h2 id="manually-queuing-bullets"><a class="header" href="#manually-queuing-bullets">Manually Queuing Bullets</a></h2>
+<p>Internally, <code>Weapon.Shoot()</code> calls <code>Ballistics.Core.AddBullet()</code> with a new <code>BulletInstance</code>.</p>
+<pre><code class="language-C#">public readonly struct BulletInstance
+{
+    public readonly Weapon Weapon;
+    public readonly Vector3 Position;
+    public readonly Vector3 Direction;
+    public readonly BulletInfo Info;
+    public readonly IVisualBullet Projectile;
+}
+</code></pre>
+<p>You can also manually add bullets to the ballistics simulation using <code>Ballistics.Core.AddBullet()</code> at any point.
+Note however, that <code>AddBullet()</code> just queues bullets for processing, so the ballistics calculations can be batched together with all other active bullets.</p>
+<p>Queued bullet instances are added to the simulation just after the main <code>Update()</code> loop.
+So all bullets queued after <code>Update()</code> (e.g. <code>LateUpdate()</code>) will not be processed until the next frame.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="wind.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="environment.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
@@ -162,7 +188,7 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="wind.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="environment.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
@@ -173,22 +199,6 @@
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
 

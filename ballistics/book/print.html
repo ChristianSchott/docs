@@ -82,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="environment.html"><strong aria-hidden="true">2.</strong> Environment Provider</a></li><li class="chapter-item expanded "><a href="bullet.html"><strong aria-hidden="true">3.</strong> Visual Bullet Providers</a></li><li class="chapter-item expanded "><a href="impact.html"><strong aria-hidden="true">4.</strong> Impact Handlers</a></li><li class="chapter-item expanded "><a href="material.html"><strong aria-hidden="true">5.</strong> Ballistic Materials</a></li><li class="chapter-item expanded "><a href="settings.html"><strong aria-hidden="true">6.</strong> Ballistic Settings</a></li><li class="chapter-item expanded "><a href="bullet_info.html"><strong aria-hidden="true">7.</strong> Bullet Info</a></li><li class="chapter-item expanded "><a href="wind.html"><strong aria-hidden="true">8.</strong> Wind Provider</a></li><li class="chapter-item expanded "><a href="weapon.html"><strong aria-hidden="true">9.</strong> Weapon</a></li><li class="chapter-item expanded "><a href="zeroing.html"><strong aria-hidden="true">10.</strong> Scope Zeroing Generator</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="contact.html">Contact</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="getting_started.html"><strong aria-hidden="true">1.1.</strong> Getting Started</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Behaviour Objects</li><li class="chapter-item expanded "><a href="bullet.html"><strong aria-hidden="true">2.</strong> Visual Bullet Providers</a></li><li class="chapter-item expanded "><a href="impact.html"><strong aria-hidden="true">3.</strong> Impact Handlers</a></li><li class="chapter-item expanded affix "><li class="part-title">Components</li><li class="chapter-item expanded "><a href="environment.html"><strong aria-hidden="true">4.</strong> Environment Provider</a></li><li class="chapter-item expanded "><a href="weapon.html"><strong aria-hidden="true">5.</strong> Weapon</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="zeroing.html"><strong aria-hidden="true">5.1.</strong> Zeroing Crosshair Generator</a></li><li class="chapter-item expanded "><a href="weapon_controller.html"><strong aria-hidden="true">5.2.</strong> Weapon Controller</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Data Objects</li><li class="chapter-item expanded "><a href="material.html"><strong aria-hidden="true">6.</strong> Ballistic Materials</a></li><li class="chapter-item expanded "><a href="settings.html"><strong aria-hidden="true">7.</strong> Ballistic Settings</a></li><li class="chapter-item expanded "><a href="bullet_info.html"><strong aria-hidden="true">8.</strong> Bullet Info</a></li><li class="chapter-item expanded affix "><a href="contact.html">Contact</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -217,20 +217,6 @@ This allows to optimize the rendering when thousands of projectiles are active s
 <li>by change the properties of the Ballistic Material to alter the bullet interactions</li>
 </ul>
 <p>For more information on each of these topics check out the following chapters.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="environment-provider"><a class="header" href="#environment-provider">Environment Provider</a></h1>
-<p>Each scene using Bullet Ballistics should have a single game object with a <code>Environment Provider</code> component attached.</p>
-<p>The <code>Environment Provider</code> configures the ballistic simulation setting for the current scene.
-Including:</p>
-<ul>
-<li>Ballistic Settings</li>
-<li>Wind Velocity</li>
-<li>Global Impact Handler</li>
-<li>Bullet Path Debugging (Editor only)</li>
-</ul>
-<p>In theory these settings can also be adjusted manually in the static <code>Ballistics.Core</code> class.
-The <code>Environment Provider</code> automatically configures the <code>Ballistics.Core</code> on startup/ scene change.</p>
-<p>When modifying the <code>Environment Provider</code> properties at runtime, make sure to enable <code>Continuous Environment Update</code> to ensure, the <code>Ballistics.Core</code> is updated too.</p>
-<p>The fields of the <code>Environment Provider</code> will be explained further in the respective chapters.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="visual-bullet-provider-1"><a class="header" href="#visual-bullet-provider-1">Visual Bullet Provider</a></h1>
 <p>A <code>Visual Bullet Provider</code> is just a scriptable object, with a <code>GetVisualBullet()</code> method, which returns a new <code>IVisualBullet</code>.</p>
 <pre><code class="language-C#">public abstract class VisualBulletProviderObject : InitializableScriptableObject
@@ -311,6 +297,85 @@ public readonly struct ImpactInfo
     public readonly Weapon Weapon;
 }
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="environment-provider"><a class="header" href="#environment-provider">Environment Provider</a></h1>
+<p>Each scene using Bullet Ballistics should have a single game object with a <code>Environment Provider</code> component attached.</p>
+<p>The <code>Environment Provider</code> configures the ballistic simulation setting for the current scene.
+Including:</p>
+<ul>
+<li>Ballistic Settings</li>
+<li>Wind Velocity</li>
+<li>Global Impact Handler</li>
+<li>Bullet Path Debugging (Editor only)</li>
+</ul>
+<p>In theory these settings can also be adjusted manually in the static <code>Ballistics.Core</code> class.
+The <code>Environment Provider</code> automatically configures the <code>Ballistics.Core</code> on startup/ scene change.</p>
+<p>When modifying the <code>Environment Provider</code> properties at runtime, make sure to enable <code>Continuous Environment Update</code> to ensure, the <code>Ballistics.Core</code> is updated too.</p>
+<p>The fields of the <code>Environment Provider</code> will be explained further in the respective chapters.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="weapon"><a class="header" href="#weapon">Weapon</a></h1>
+<p>The <code>Weapon</code> component is usually the main entry-point for interacting with the ballistics simulation.</p>
+<p>It is mainly just a convenience component, that allows you to combine a <code>Bullet Info</code>, <code>Visual Bullet Provider</code>, and spawn point transform, so you only have to call <code>Weapon.Shoot()</code> to fire a bullet. </p>
+<h2 id="visual-vs-bullet-spawn-point"><a class="header" href="#visual-vs-bullet-spawn-point">Visual vs. Bullet Spawn Point</a></h2>
+<p>The <code>Weapon</code> component exposes two spawn point transforms, the <code>Bullet Spawn Point</code> and <code>Visual Spawn Point</code>.</p>
+<ul>
+<li><code>Bullet Spawn Point</code> is the position used for the internal ballistics simulation and collision detection (z-axis of the transform pointing forward)</li>
+<li><code>Visual Spawn Point</code> provides the initial position for the <code>Visual Bullet</code> (if present)</li>
+</ul>
+<p>This distinction is often useful for first person shooter games, because the hit detection should usually originate from the center of the camera, while the visual bullet representation should appear to originate at the end of the weapon's barrel.</p>
+<p>This obviously causes a discrepancy between the visual bullet and the internal hit detection.
+To mitigate this offset, Bullet Ballistics automatically moves the visual bullet position towards the internal bullet position over a given distance set in the <code>BallisticSettings</code> <code>Visual To Physical Distance</code>.</p>
+<h2 id="manually-queuing-bullets"><a class="header" href="#manually-queuing-bullets">Manually Queuing Bullets</a></h2>
+<p>Internally, <code>Weapon.Shoot()</code> calls <code>Ballistics.Core.AddBullet()</code> with a new <code>BulletInstance</code>.</p>
+<pre><code class="language-C#">public readonly struct BulletInstance
+{
+    public readonly Weapon Weapon;
+    public readonly Vector3 Position;
+    public readonly Vector3 Direction;
+    public readonly BulletInfo Info;
+    public readonly IVisualBullet Projectile;
+}
+</code></pre>
+<p>You can also manually add bullets to the ballistics simulation using <code>Ballistics.Core.AddBullet()</code> at any point.
+Note however, that <code>AddBullet()</code> just queues bullets for processing, so the ballistics calculations can be batched together with all other active bullets.</p>
+<p>Queued bullet instances are added to the simulation just after the main <code>Update()</code> loop.
+So all bullets queued after <code>Update()</code> (e.g. <code>LateUpdate()</code>) will not be processed until the next frame.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="zeroing-crosshair-generator"><a class="header" href="#zeroing-crosshair-generator">Zeroing Crosshair Generator</a></h1>
+<p>Due to bullet drop when gravity is enabled, bullets will hit below where you have aimed.
+To correct for this, you have to aim above your target.</p>
+<p>Given a <code>Weapon</code> and a set of distances, this component will generate and draw reticle 'dots' for hitting targets at the given distances.</p>
+<p>The other fields of this component allow you to specify the appearance of the generated indicator mesh.
+You can use this generated mesh directly, or use it as a template for drawing a custom reticle with the proper offsets in an image creation program of your choice.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="weapon-controller"><a class="header" href="#weapon-controller">Weapon Controller</a></h1>
+<p>The <code>Weapon Controller</code> component is a convenience wrapper around a basic <code>Weapon</code> component.</p>
+<p>It allows your <code>Weapon</code> to behave like one of the most common weapon types (<code>Full Auto</code>, <code>Single Shot</code>, <code>Shotgun</code>, or <code>Burst</code>).
+You only have to pull/release the trigger using: </p>
+<pre><code class="language-C#">WeaponController.SetTrigger(bool held);
+</code></pre>
+<p>It also allows you to add basic spread and bullet management.</p>
+<h2 id="zeroing"><a class="header" href="#zeroing">Zeroing</a></h2>
+<p>The <code>Weapon Controller</code> also includes zeroing the weapon, to counteract bullet drop caused by gravity for a given distance.</p>
+<p>Specify the <code>Distances</code> you want to be able to zero your weapon at, and set the <code>CurrentZeroingIndex</code>.
+<strong>Note!</strong> when updating the <code>Weapon</code>/<code>Bullet Info</code> or <code>Distances</code> at runtime, you have to call <code>UpdateZeroing()</code>, to recalculate the zeroing angles.</p>
+<p>The <code>Weapon Controller</code> simply angles the bullet's shoot direction slightly upwards to hit targets further away.</p>
+<h2 id="spread-controller"><a class="header" href="#spread-controller">Spread Controller</a></h2>
+<pre><code class="language-C#">public class SpreadController : MonoBehaviour
+{
+    public virtual Vector3 CalculateShootDirection(Weapon weapon) { return weapon.BulletSpawnPoint.forward; }
+    public virtual void BulletFired() { }
+}
+</code></pre>
+<p><code>CalculateShootDirection</code> is called for every bullet fired by the weapon and specifies in which direction it is fired.
+<code>BulletFired</code> is called by the <code>WeaponController</code> each time  is shoots (regardless of the number of bullets fired in the single shot).
+This can be used for e.g. increasing the spread angle of following bullets.</p>
+<p>As an example for a custom spray controller, <code>Default Spread Controller</code> implements a Counter-Strike-style spray pattern controller, where you can specify the spray pattern via unity's <code>Animation Curve</code>s.</p>
+<h2 id="magazine-controller"><a class="header" href="#magazine-controller">Magazine Controller</a></h2>
+<pre><code class="language-C#">public class MagazineController : MonoBehaviour
+{
+    public virtual bool IsBulletAvailable() { return true; }
+    public virtual void BulletFired() { }
+}
+</code></pre>
+<p>The <code>Magazine Controller</code> is queried each time before the <code>Weapon Controller</code> is fired, to check if <code>IsBulletAvailable()</code>.</p>
+<p><code>DefaultMagazineController</code> implements a very basic magazine based bullet management.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ballistic-material"><a class="header" href="#ballistic-material">Ballistic Material</a></h1>
 <p>A <code>Ballistic Material</code> specifies how a projectile interacts with a collider.</p>
 <p>Custom <code>Ballistic Materials</code> can be created by implementing the <code>IBallisticMaterial</code> interface, and associating them with a <code>Physic Material</code> at runtime, by adding them to the <code>BallisticMaterialCache</code>.</p>
@@ -345,11 +410,19 @@ The <code>SpeedFactor</code> is multiplied with the current bullet velocity to r
 <p>The <code>SpreadAngle</code> only applies to <code>Ricochet</code> bullets. 
 When a bullet penetrates a collider, the spread is applied on the exit and is determined by the <code>GetSpreadAngle</code> method.</p>
 <p>For additional information about the <code>Ballistic Material</code> object fields, please refer to the inspector tooltips.</p>
+<h1 id="ballistic-material-browser"><a class="header" href="#ballistic-material-browser">Ballistic Material Browser</a></h1>
+<p>For an easy overview over all <code>Ballistic Material</code>s in your project, open the <code>Window/Ballistics/Ballistic Material Browser</code> editor window.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ballistic-settings"><a class="header" href="#ballistic-settings">Ballistic Settings</a></h1>
+<p>The <code>Ballistic Settings</code> object exposes parameters for adjusting the internal ballistics simulation.
+To bind a <code>Ballistic Settings</code> object to a given scene, use an <code>Environment Provider</code> component.</p>
+<p>Create a new <code>Ballistic Settings</code> object under <code>Assets/Create/Ballistics/Ballistic Settings</code>.</p>
+<p>Alternatively, you have direct access to the simulations settings via the static <code>Ballistics.Core</code> class.
+Make sure you call <code>Ballistics.Core.UpdateEnvironment()</code>, after changing the simulation settings, to rebuild the <code>Ballistics.Environment</code> used by the internal simulation jobs.</p>
+<p>For additional information about the <code>Ballistic Settings</code> object fields, please refer to the inspector tooltips.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="bullet-info"><a class="header" href="#bullet-info">Bullet Info</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="wind-provider"><a class="header" href="#wind-provider">Wind Provider</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="weapon"><a class="header" href="#weapon">Weapon</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="scope-zeroing-generator"><a class="header" href="#scope-zeroing-generator">Scope Zeroing Generator</a></h1>
+<p>The <code>Bullet Info</code> object allows setting physical information about the bullet fired by a weapon, which layers the bullet is able to hit, and a bullet specific <code>Impact Handler</code> object.</p>
+<p>Create a new <code>Bullet Info</code> object under <code>Assets/Create/Ballistics/Bullet Info</code>.</p>
+<p>For additional information about the <code>Bullet Info</code> object fields, please refer to the inspector tooltips.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="contact"><a class="header" href="#contact">Contact</a></h1>
 <p>Any questions or suggestions?</p>
 <ul>
@@ -376,22 +449,6 @@ When a bullet penetrates a collider, the spread is applied on the exit and is de
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
 

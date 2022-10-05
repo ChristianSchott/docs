@@ -44,3 +44,7 @@ The `SpreadAngle` only applies to `Ricochet` bullets.
 When a bullet penetrates a collider, the spread is applied on the exit and is determined by the `GetSpreadAngle` method.
 
 For additional information about the `Ballistic Material` object fields, please refer to the inspector tooltips.
+
+# Ballistic Material Browser
+
+For an easy overview over all `Ballistic Material`s in your project, open the `Window/Ballistics/Ballistic Material Browser` editor window.

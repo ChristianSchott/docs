@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Wind Provider - Bullet Ballistics</title>
+        <title>Weapon Controller - Bullet Ballistics</title>
 
 
         <!-- Custom HTML head -->
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded "><a href="getting_started.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="environment.html"><strong aria-hidden="true">2.</strong> Environment Provider</a></li><li class="chapter-item expanded "><a href="bullet.html"><strong aria-hidden="true">3.</strong> Visual Bullet Providers</a></li><li class="chapter-item expanded "><a href="impact.html"><strong aria-hidden="true">4.</strong> Impact Handlers</a></li><li class="chapter-item expanded "><a href="material.html"><strong aria-hidden="true">5.</strong> Ballistic Materials</a></li><li class="chapter-item expanded "><a href="settings.html"><strong aria-hidden="true">6.</strong> Ballistic Settings</a></li><li class="chapter-item expanded "><a href="bullet_info.html"><strong aria-hidden="true">7.</strong> Bullet Info</a></li><li class="chapter-item expanded "><a href="wind.html" class="active"><strong aria-hidden="true">8.</strong> Wind Provider</a></li><li class="chapter-item expanded "><a href="weapon.html"><strong aria-hidden="true">9.</strong> Weapon</a></li><li class="chapter-item expanded "><a href="zeroing.html"><strong aria-hidden="true">10.</strong> Scope Zeroing Generator</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="contact.html">Contact</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="getting_started.html"><strong aria-hidden="true">1.1.</strong> Getting Started</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Behaviour Objects</li><li class="chapter-item expanded "><a href="bullet.html"><strong aria-hidden="true">2.</strong> Visual Bullet Providers</a></li><li class="chapter-item expanded "><a href="impact.html"><strong aria-hidden="true">3.</strong> Impact Handlers</a></li><li class="chapter-item expanded affix "><li class="part-title">Components</li><li class="chapter-item expanded "><a href="environment.html"><strong aria-hidden="true">4.</strong> Environment Provider</a></li><li class="chapter-item expanded "><a href="weapon.html"><strong aria-hidden="true">5.</strong> Weapon</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="zeroing.html"><strong aria-hidden="true">5.1.</strong> Zeroing Crosshair Generator</a></li><li class="chapter-item expanded "><a href="weapon_controller.html" class="active"><strong aria-hidden="true">5.2.</strong> Weapon Controller</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Data Objects</li><li class="chapter-item expanded "><a href="material.html"><strong aria-hidden="true">6.</strong> Ballistic Materials</a></li><li class="chapter-item expanded "><a href="settings.html"><strong aria-hidden="true">7.</strong> Ballistic Settings</a></li><li class="chapter-item expanded "><a href="bullet_info.html"><strong aria-hidden="true">8.</strong> Bullet Info</a></li><li class="chapter-item expanded affix "><a href="contact.html">Contact</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -142,17 +142,48 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="wind-provider"><a class="header" href="#wind-provider">Wind Provider</a></h1>
+                        <h1 id="weapon-controller"><a class="header" href="#weapon-controller">Weapon Controller</a></h1>
+<p>The <code>Weapon Controller</code> component is a convenience wrapper around a basic <code>Weapon</code> component.</p>
+<p>It allows your <code>Weapon</code> to behave like one of the most common weapon types (<code>Full Auto</code>, <code>Single Shot</code>, <code>Shotgun</code>, or <code>Burst</code>).
+You only have to pull/release the trigger using: </p>
+<pre><code class="language-C#">WeaponController.SetTrigger(bool held);
+</code></pre>
+<p>It also allows you to add basic spread and bullet management.</p>
+<h2 id="zeroing"><a class="header" href="#zeroing">Zeroing</a></h2>
+<p>The <code>Weapon Controller</code> also includes zeroing the weapon, to counteract bullet drop caused by gravity for a given distance.</p>
+<p>Specify the <code>Distances</code> you want to be able to zero your weapon at, and set the <code>CurrentZeroingIndex</code>.
+<strong>Note!</strong> when updating the <code>Weapon</code>/<code>Bullet Info</code> or <code>Distances</code> at runtime, you have to call <code>UpdateZeroing()</code>, to recalculate the zeroing angles.</p>
+<p>The <code>Weapon Controller</code> simply angles the bullet's shoot direction slightly upwards to hit targets further away.</p>
+<h2 id="spread-controller"><a class="header" href="#spread-controller">Spread Controller</a></h2>
+<pre><code class="language-C#">public class SpreadController : MonoBehaviour
+{
+    public virtual Vector3 CalculateShootDirection(Weapon weapon) { return weapon.BulletSpawnPoint.forward; }
+    public virtual void BulletFired() { }
+}
+</code></pre>
+<p><code>CalculateShootDirection</code> is called for every bullet fired by the weapon and specifies in which direction it is fired.
+<code>BulletFired</code> is called by the <code>WeaponController</code> each time  is shoots (regardless of the number of bullets fired in the single shot).
+This can be used for e.g. increasing the spread angle of following bullets.</p>
+<p>As an example for a custom spray controller, <code>Default Spread Controller</code> implements a Counter-Strike-style spray pattern controller, where you can specify the spray pattern via unity's <code>Animation Curve</code>s.</p>
+<h2 id="magazine-controller"><a class="header" href="#magazine-controller">Magazine Controller</a></h2>
+<pre><code class="language-C#">public class MagazineController : MonoBehaviour
+{
+    public virtual bool IsBulletAvailable() { return true; }
+    public virtual void BulletFired() { }
+}
+</code></pre>
+<p>The <code>Magazine Controller</code> is queried each time before the <code>Weapon Controller</code> is fired, to check if <code>IsBulletAvailable()</code>.</p>
+<p><code>DefaultMagazineController</code> implements a very basic magazine based bullet management.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="bullet_info.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="zeroing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="weapon.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="material.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -162,33 +193,17 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="bullet_info.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="zeroing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="weapon.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="material.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
 

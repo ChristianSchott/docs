@@ -1,23 +1,21 @@
 # Summary
 
-[Introduction](./introduction.md)
+- [Introduction](./introduction.md)
+    - [Getting Started](./getting_started.md)
 
----
-
-- [Getting Started](./getting_started.md)
-- [Environment Provider](./environment.md)
+# Behaviour Objects
 - [Visual Bullet Providers](./bullet.md)
 - [Impact Handlers](./impact.md)
-- [Ballistic Materials](./material.md)
 
-- [Ballistic Settings](./settings.md)
-
-- [Bullet Info](./bullet_info.md)
-- [Wind Provider](./wind.md)
-
+# Components
+- [Environment Provider](./environment.md)
 - [Weapon](./weapon.md)
-- [Scope Zeroing Generator](./zeroing.md)
+    - [Zeroing Crosshair Generator](./zeroing.md)
+    - [Weapon Controller](./weapon_controller.md)
 
----
+# Data Objects
+- [Ballistic Materials](./material.md)
+- [Ballistic Settings](./settings.md)
+- [Bullet Info](./bullet_info.md)
 
 [Contact](./contact.md)
