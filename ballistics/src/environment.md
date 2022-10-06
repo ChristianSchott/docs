@@ -12,6 +12,4 @@ Including:
 In theory these settings can also be adjusted manually in the static `Ballistics.Core` class.
 The `Environment Provider` automatically configures the `Ballistics.Core` on startup/ scene change.
 
-When modifying the `Environment Provider` properties at runtime, make sure to enable `Continuous Environment Update` to ensure, the `Ballistics.Core` is updated too.
-
 The fields of the `Environment Provider` will be explained further in the respective chapters.

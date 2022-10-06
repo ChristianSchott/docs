@@ -154,7 +154,6 @@ Including:</p>
 </ul>
 <p>In theory these settings can also be adjusted manually in the static <code>Ballistics.Core</code> class.
 The <code>Environment Provider</code> automatically configures the <code>Ballistics.Core</code> on startup/ scene change.</p>
-<p>When modifying the <code>Environment Provider</code> properties at runtime, make sure to enable <code>Continuous Environment Update</code> to ensure, the <code>Ballistics.Core</code> is updated too.</p>
 <p>The fields of the <code>Environment Provider</code> will be explained further in the respective chapters.</p>
 
                     </main>
@@ -186,6 +185,22 @@ The <code>Environment Provider</code> automatically configures the <code>Ballist
 
         </div>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
 
