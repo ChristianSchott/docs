@@ -11,6 +11,7 @@ All together, Bullet Ballistics empowers you to simulate hundreds to thousands o
 
 ## Links
 
+- [Asset Store](https://assetstore.unity.com/packages/slug/72755)
 - [Online Demo](https://christianschott.github.io/demos/ballistics/index.html)
 - [Documentation](https://christianschott.github.io/docs/ballistics/book/index.html)
 - [Video Tutorials](https://youtube.com/playlist?list=PLH6XAuNbhBuvQNtq6kag7_sbsSytAm0ft)
@@ -28,7 +29,9 @@ All together, Bullet Ballistics empowers you to simulate hundreds to thousands o
     - Gravity / Bullet Drop
     - Air Resistance
     - Wind
+    - Magnus Effect (Bullet Spin)
     - Weapon Zeroing + Reticle Generation
+    - Trajectory Visualization
 - Material Interactions
     - Object Penetration
     - Ricochets

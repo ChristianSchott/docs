@@ -4,5 +4,5 @@ Any questions or suggestions?
 
 - Christian Schott
 - E-Mail: <mr3d.cs@gmail.com>
-- YouTube: <https://www.youtube.com/channel/UC2-tdH9kaJTJ36vbzB31fbg>
+- YouTube: <https://youtube.com/playlist?list=PLH6XAuNbhBuvQNtq6kag7_sbsSytAm0ft>
 - Unity AssetStore: <https://assetstore.unity.com/publishers/16528>

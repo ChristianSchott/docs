@@ -82,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="getting_started.html"><strong aria-hidden="true">1.1.</strong> Getting Started</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Behaviour Objects</li><li class="chapter-item expanded "><a href="bullet.html"><strong aria-hidden="true">2.</strong> Visual Bullet Providers</a></li><li class="chapter-item expanded "><a href="impact.html"><strong aria-hidden="true">3.</strong> Impact Handlers</a></li><li class="chapter-item expanded affix "><li class="part-title">Components</li><li class="chapter-item expanded "><a href="environment.html"><strong aria-hidden="true">4.</strong> Environment Provider</a></li><li class="chapter-item expanded "><a href="weapon.html"><strong aria-hidden="true">5.</strong> Weapon</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="zeroing.html"><strong aria-hidden="true">5.1.</strong> Zeroing Crosshair Generator</a></li><li class="chapter-item expanded "><a href="weapon_controller.html"><strong aria-hidden="true">5.2.</strong> Weapon Controller</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Data Objects</li><li class="chapter-item expanded "><a href="material.html"><strong aria-hidden="true">6.</strong> Ballistic Materials</a></li><li class="chapter-item expanded "><a href="settings.html"><strong aria-hidden="true">7.</strong> Ballistic Settings</a></li><li class="chapter-item expanded "><a href="bullet_info.html"><strong aria-hidden="true">8.</strong> Bullet Info</a></li><li class="chapter-item expanded affix "><a href="contact.html">Contact</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="getting_started.html"><strong aria-hidden="true">1.1.</strong> Getting Started</a></li></ol></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">2.</strong> Configuration</a></li><li class="chapter-item expanded affix "><li class="part-title">Behaviour Objects</li><li class="chapter-item expanded "><a href="bullet.html"><strong aria-hidden="true">3.</strong> Visual Bullet Providers</a></li><li class="chapter-item expanded "><a href="impact.html"><strong aria-hidden="true">4.</strong> Impact Handlers</a></li><li class="chapter-item expanded affix "><li class="part-title">Components</li><li class="chapter-item expanded "><a href="environment.html"><strong aria-hidden="true">5.</strong> Environment Provider</a></li><li class="chapter-item expanded "><a href="weapon.html"><strong aria-hidden="true">6.</strong> Weapon</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="zeroing.html"><strong aria-hidden="true">6.1.</strong> Zeroing Crosshair Generator</a></li><li class="chapter-item expanded "><a href="weapon_controller.html"><strong aria-hidden="true">6.2.</strong> Weapon Controller</a></li></ol></li><li class="chapter-item expanded "><li class="part-title">Data Objects</li><li class="chapter-item expanded "><a href="material.html"><strong aria-hidden="true">7.</strong> Ballistic Materials</a></li><li class="chapter-item expanded "><a href="settings.html"><strong aria-hidden="true">8.</strong> Ballistic Settings</a></li><li class="chapter-item expanded "><a href="bullet_info.html"><strong aria-hidden="true">9.</strong> Bullet Info</a></li><li class="chapter-item expanded affix "><a href="contact.html">Contact</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -151,6 +151,7 @@ While also minimizing runtime garbage collection allocations wherever possible.<
 <p>All together, Bullet Ballistics empowers you to simulate hundreds to thousands of physically accurate projectiles in your games simultaneously without a hustle.</p>
 <h2 id="links"><a class="header" href="#links">Links</a></h2>
 <ul>
+<li><a href="https://assetstore.unity.com/packages/slug/72755">Asset Store</a></li>
 <li><a href="https://christianschott.github.io/demos/ballistics/index.html">Online Demo</a></li>
 <li><a href="https://christianschott.github.io/docs/ballistics/book/index.html">Documentation</a></li>
 <li><a href="https://youtube.com/playlist?list=PLH6XAuNbhBuvQNtq6kag7_sbsSytAm0ft">Video Tutorials</a></li>
@@ -168,7 +169,9 @@ While also minimizing runtime garbage collection allocations wherever possible.<
 <li>Gravity / Bullet Drop</li>
 <li>Air Resistance</li>
 <li>Wind</li>
+<li>Magnus Effect (Bullet Spin)</li>
 <li>Weapon Zeroing + Reticle Generation</li>
+<li>Trajectory Visualization</li>
 </ul>
 </li>
 <li>Material Interactions
@@ -260,6 +263,20 @@ This allows to optimize the rendering when thousands of projectiles are active s
 <li>by change the properties of the Ballistic Material to alter the bullet interactions</li>
 </ul>
 <p>For more information on each of these topics check out the following chapters.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ballistics-configuration"><a class="header" href="#ballistics-configuration">Ballistics Configuration</a></h1>
+<p>Bullet Ballistics allows you to disable parts of its functionality you do not need, in order to optimize performance for your use case.</p>
+<p>Navigate to <code>Window/Ballistics/Ballistic Config</code> to open the configuration window.
+There you can select which features you want to disable for which build target.
+Do not forget to hit <code>Apply</code> to apply the changes.</p>
+<h2 id="scripting-define-symbols"><a class="header" href="#scripting-define-symbols">Scripting Define Symbols</a></h2>
+<p>The configuration window is just a convenience utility for setting compiler define symbols.
+You can also set them manually under <code>Project Settings/Player/Other Settings/Script Compilation</code>.</p>
+<p>Currently supported define symbols:</p>
+<ul>
+<li><code>BB_NO_AIR_RESISTANCE</code>: disable drag force on projectiles</li>
+<li><code>BB_NO_SPIN</code>: disable forces due to bullet spin (depends on air resistance)</li>
+<li><code>BB_NO_DISTANCE_TRACKING</code>: disable tracking the distance a bullet has traveled</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="visual-bullet-provider-1"><a class="header" href="#visual-bullet-provider-1">Visual Bullet Provider</a></h1>
 <p>A <code>Visual Bullet Provider</code> is just a scriptable object, with a <code>GetVisualBullet()</code> method, which returns a new <code>IVisualBullet</code>.</p>
 <pre><code class="language-C#">public abstract class VisualBulletProviderObject : InitializableScriptableObject
@@ -470,7 +487,7 @@ Make sure you call <code>Ballistics.Core.UpdateEnvironment()</code>, after chang
 <ul>
 <li>Christian Schott</li>
 <li>E-Mail: <a href="mailto:mr3d.cs@gmail.com">mr3d.cs@gmail.com</a></li>
-<li>YouTube: <a href="https://www.youtube.com/channel/UC2-tdH9kaJTJ36vbzB31fbg">https://www.youtube.com/channel/UC2-tdH9kaJTJ36vbzB31fbg</a></li>
+<li>YouTube: <a href="https://youtube.com/playlist?list=PLH6XAuNbhBuvQNtq6kag7_sbsSytAm0ft">https://youtube.com/playlist?list=PLH6XAuNbhBuvQNtq6kag7_sbsSytAm0ft</a></li>
 <li>Unity AssetStore: <a href="https://assetstore.unity.com/publishers/16528">https://assetstore.unity.com/publishers/16528</a></li>
 </ul>
 
@@ -491,22 +508,6 @@ Make sure you call <code>Ballistics.Core.UpdateEnvironment()</code>, after chang
 
         </div>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        <script type="text/javascript">
-            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
-            const socket = new WebSocket(wsAddress);
-            socket.onmessage = function (event) {
-                if (event.data === "reload") {
-                    socket.close();
-                    location.reload();
-                }
-            };
-
-            window.onbeforeunload = function() {
-                socket.close();
-            }
-        </script>
 
 
 

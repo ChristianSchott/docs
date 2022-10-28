@@ -2,6 +2,7 @@
 
 - [Introduction](./introduction.md)
     - [Getting Started](./getting_started.md)
+- [Configuration](./config.md)
 
 # Behaviour Objects
 - [Visual Bullet Providers](./bullet.md)
