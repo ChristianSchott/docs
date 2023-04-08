@@ -1,0 +1,681 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Fluid Flow</title>
+        <meta name="robots" content="noindex" />
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">1.1.</strong> Frequently Asked Questions</a></li><li class="chapter-item expanded "><a href="getting_started.html"><strong aria-hidden="true">1.2.</strong> Getting Started</a></li></ol></li><li class="chapter-item expanded "><a href="drawing.html"><strong aria-hidden="true">2.</strong> Drawing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="drawing_decal.html"><strong aria-hidden="true">2.1.</strong> FFDecal</a></li><li class="chapter-item expanded "><a href="drawing_brush.html"><strong aria-hidden="true">2.2.</strong> FFBrush</a></li></ol></li><li class="chapter-item expanded "><a href="custom_shaders.html"><strong aria-hidden="true">3.</strong> Custom Shaders</a></li><li class="chapter-item expanded affix "><li class="part-title">Components</li><li class="chapter-item expanded "><a href="components/ffcanvas.html"><strong aria-hidden="true">4.</strong> FFCanvas</a></li><li class="chapter-item expanded "><a href="components/ffgravitymap.html"><strong aria-hidden="true">5.</strong> FFGravityMap</a></li><li class="chapter-item expanded "><a href="components/ffsimulator.html"><strong aria-hidden="true">6.</strong> FFSimulator</a></li><li class="chapter-item expanded "><a href="components/ffsimulatorparticles.html"><strong aria-hidden="true">7.</strong> FFSimulatorParticle</a></li><li class="chapter-item expanded "><a href="components/ffeffects.html"><strong aria-hidden="true">8.</strong> FFEffects</a></li><li class="chapter-item expanded "><a href="components/ffseamfixer.html"><strong aria-hidden="true">9.</strong> FFSeamFixer</a></li><li class="chapter-item expanded affix "><li class="part-title">ScriptableObjects</li><li class="chapter-item expanded "><a href="scriptable_objects/ffmodelcache.html"><strong aria-hidden="true">10.</strong> FFModelCache</a></li><li class="chapter-item expanded "><a href="scriptable_objects/texture_channel.html"><strong aria-hidden="true">11.</strong> Texture Channel</a></li><li class="chapter-item expanded "><a href="scriptable_objects/texture_channel_format.html"><strong aria-hidden="true">12.</strong> Texture Channel Format</a></li><li class="chapter-item expanded affix "><a href="contact.html">Contact</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Fluid Flow</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p><strong>Fluid Flow 2</strong> allows you to paint fluid to your objects in real time, and simulate it flowing down the surface dynamically.
+Use it for blood, paint, or any other kind of fluid.</p>
+<p>The main feature of Fluid Flow is the <strong>dynamic flow simulation</strong>.
+However, you can also use it just for real-time <strong>3D texture painting/decals</strong>, which also supports <em>skinned mesh renderers</em>.
+Due to its <strong>modular</strong> structure, you can decide which parts of Fluid Flow you want to use, without unnecessarily bloating your project.</p>
+<p>The texture painting and flow simulation are handled fully on the <strong>GPU</strong> for optimal performance.
+Fluid Flow is not a physically accurate fluid simulation, but it provides <em>good-looking</em> fluid for your games at a comparable <strong>low performance cost</strong>!</p>
+<p>As fluid is painted and simulated in UV space, your meshes require a UV unwrap with <em>non-overlapping UV islands</em>, so there is a 1:1 correlation between the object's surface and the texture.
+You can also configure Fluid Flow to use the lightmap UV set, which can be generated by unity automatically.</p>
+<p><em><strong>Important:</strong></em> Please note that your objects require a special shader for overlaying the fluid, or when using the texture atlas system.
+There are basic surface and shader graph shaders included. Alternatively, you can easily create your own supported shaders with the provided custom shader graph nodes, or shader utility functions.</p>
+<h2 id="links"><a class="header" href="#links">Links</a></h2>
+<ul>
+<li><a href="https://assetstore.unity.com/packages/slug/143786">Asset Store</a></li>
+<li><a href="https://christianschott.github.io/demos/fluidflow/index.html">Online Demo</a></li>
+<li><a href="https://christianschott.github.io/docs/fluidflow/book/index.html">Documentation</a></li>
+<li><a href="https://youtube.com/playlist?list=PLH6XAuNbhBuukHLbeF1FId0-m2FzyJZiP">Video Tutorials</a></li>
+<li>E-Mail: <a href="mailto:mr3d.cs@gmail.com">mr3d.cs@gmail.com</a></li>
+</ul>
+<h2 id="required-unity-packages"><a class="header" href="#required-unity-packages">Required Unity Packages</a></h2>
+<ul>
+<li><code>Unity.Burst</code></li>
+<li><code>Unity.Mathematics</code></li>
+</ul>
+<h2 id="features"><a class="header" href="#features">Features</a></h2>
+<ul>
+<li>real-time UV space gravity map generation:
+<ul>
+<li>texture-based flow simulation</li>
+<li>particle-based flow simulation</li>
+</ul>
+</li>
+<li>3d texture painting on (skinned) renderers</li>
+<li>draw decals on (skinned) renderers</li>
+<li>fluid flowing over UV seams</li>
+<li>fluid effects: evaporation, blur (soaking)</li>
+<li>caching system</li>
+<li>custom editor windows</li>
+<li>modular, optimized and open code-base (no .dlls)</li>
+</ul>
+<h2 id="technical-details"><a class="header" href="#technical-details">Technical Details</a></h2>
+<p>The texture painting and fluid simulation are independent of the render pipeline used.
+For overlaying fluid over your models, or unpacking the texture atlas you might have to adjust your custom shaders.
+There are custom shader graph nodes, and surface shader utility functions included to make this as easy as possible.</p>
+<h2 id="limitations"><a class="header" href="#limitations">Limitations</a></h2>
+<ul>
+<li><strong>NOT</strong> a physically-based navier-stokes fluid solver. Fluid just moves based on gravity.</li>
+<li><strong>Requires non overlapping</strong> UV map , as fluid is simulated in UV space.</li>
+<li>Renderers <strong>require</strong> a <strong>specialized shader</strong> for overlaying the fluid texture.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="frequently-asked-questions"><a class="header" href="#frequently-asked-questions">Frequently Asked Questions</a></h1>
+<p>Feel free to send me your questions, so I can add them here (<a href="mailto:mr3d.cs@gmail.com">mr3d.cs@gmail.com</a>).</p>
+<ul>
+<li>
+<p><strong>Does FluidFlow support URP, HDRP, etc.?</strong></p>
+<p>Yes, FluidFlow is largely independent of the rendering pipeline your project is using.
+However, for overlaying the fluid texture you will need a shader, supported by your rendering pipeline, which is able to overlay the fluid texture.</p>
+</li>
+<li>
+<p><strong>How can I increase the speed at which the fluid flows?</strong></p>
+<p>In each fluid simulation step, the fluid moves from one pixel to the neighboring pixels depending on gravity.
+Therefore, the maximum fluid speed is limited by one pixel per simulation step.
+The trivial way for altering the fluid speed is decreasing the fluid texture resolution, so each pixel is larger, or increasing the update rate of the fluid simulation.
+However, keep in mind, that the latter has a performance cost, so you should not go too far with this approach.</p>
+</li>
+<li>
+<p><strong>Does FluidFlow work on mobile platforms?</strong></p>
+<p>Yes, FluidFlow was successfully tested on a Google Pixel 3a, and should also be able to run on older devices.
+iOS based devices should also work, however, I am not able to test this myself. 
+I would greatly appreciate it, if you share your experiences using FluidFlow on Apple devices.</p>
+</li>
+<li>
+<p><strong>How can I access/safe the generated textures?</strong></p>
+<p>You can access the internal texture, by accessing the <code>TextureChannels</code> property on your <code>FFCanvas</code>. E.g. <code>myCanvas.TextureChannels[&quot;Fluid&quot;]</code>.
+As the texture data is stored inside a RenderTexture, it does only exist in GPU memory.
+If you want to access the texture data from C#, or save the texture, you will have to read it to CPU memory first.
+FluidFlow allows you to call the <code>myRenderTexture.RequestReadback()</code> method, to simplify this process. 
+Check the <code>SaveTextureChannel()</code> function in <code>Scripts/Extensions/FFCanvasExtensions.cs</code> for a more elaborate example.</p>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
+<h2 id="a-minimal-example-for-setting-up-a-ffcanvas"><a class="header" href="#a-minimal-example-for-setting-up-a-ffcanvas">A minimal example for setting up a <code>FFCanvas</code>:</a></h2>
+<ul>
+<li>
+<p>Add a <code>FFCanvas</code> component to an object in your scene.</p>
+</li>
+<li>
+<p>Assign the renderers of the objects you want to draw on, to the <strong>Surfaces</strong> of the <code>FFCanvas</code>, and set up the surface as described in <a href="./components/ffcanvas.html#RenderTargets">FFCanvas</a>.</p>
+</li>
+<li>
+<p>Add the <a href="./scriptable_objects/texture_channel.html"><strong>Texture Channels</strong></a> you want to draw on, and set their <a href="./scriptable_objects/texture_channel_format.html"><strong>Texture Channel Format</strong></a>. </p>
+</li>
+<li>
+<p>Assign a material to your <strong>Surfaces'</strong> renderers, that supports drawing to the selected <strong>Texture Channels</strong>.
+Fluid Flow provides basic shaders (integrated RP, URP, HDRP) that support drawing to the <code>Color</code>, <code>Normal</code>, and <code>Fluid</code> texture channels.</p>
+</li>
+<li>
+<p>When the internal texture channels of a <code>FFCanvas</code> are shared by multiple <strong>Surfaces</strong> (<code>UV Scale != (1,1)</code>, <code>UV Offset != (0,0)</code>), the renderers' materials need to transform their UVs before sampling the texture set by the <code>FFCanvas</code>. 
+Most shaders support this out-of-the-box via the <code>Tiling</code> and <code>Offset</code> of the texture property.
+In the <strong>Material Property Overrides</strong> of the <code>FFCanvas</code> you can you can set the name of this property for a given shader (if no target shader is set, it applies to all shaders).
+Unity's default naming scheme for accessing the <code>Tiling</code> and <code>Offset</code> of a given texture property, e.g. <code>_MainTex</code>, is adding <code>_ST</code> to the property name (<code>_MainTex_ST</code>).</p>
+</li>
+<li>
+<p>You should now be able to draw to the <code>FFCanvas</code> as described in <a href="./drawing.html">Drawing</a>. For testing you can simply add a <code>Simple Project Decal</code> component, and assign a camera and <code>FFCanvas</code>. This should allow you to project a decal onto the canvas by clicking on the objects in the <code>Game</code> window while playing.</p>
+</li>
+</ul>
+<h2 id="texture-based-fluid-simulation"><a class="header" href="#texture-based-fluid-simulation">Texture-based fluid simulation:</a></h2>
+<ul>
+<li>
+<p>Add a <code>Fluid</code> texture channel using the <code>FluidFormat</code> and <code>BLACK</code> initialization to your <code>FFCanvas</code>.</p>
+</li>
+<li>
+<p>Make sure, your renderers have a material assigned, which is able to overlay the <code>Fluid</code> texture channel. 
+FluidFlow provides example shaders for all rendering pipelines.</p>
+</li>
+<li>
+<p>Add a <code>FFGravityMap</code> component and assign the targeted <code>FFCanvas</code>.</p>
+</li>
+<li>
+<p>Add a <strong><code>FFSimulator</code></strong> component, assign the <code>FFGravityMap</code> created before, and select <code>Fluid</code> as the targeted texture channel.</p>
+</li>
+<li>
+<p>When paining to the <code>FFCanvas'</code> <code>Fluid</code> texture channel (using the <code>FLUID</code> type instead of <code>COLOR</code> while painting), the painted fluid should flow according to gravity.</p>
+</li>
+</ul>
+<h2 id="particle-based-fluid-simulation"><a class="header" href="#particle-based-fluid-simulation">Particle-based fluid simulation:</a></h2>
+<ul>
+<li>
+<p>Add a <code>Fluid</code> texture channel using the <code>FluidFormat</code> and <code>BLACK</code> initialization to your <code>FFCanvas</code>.</p>
+</li>
+<li>
+<p>Make sure, your renderers have a material assigned, which is able to overlay the <code>Fluid</code> texture channel. 
+FluidFlow provides example shaders for all rendering pipelines.</p>
+</li>
+<li>
+<p>Add a <code>FFGravityMap</code> component and assign the targeted <code>FFCanvas</code>.</p>
+</li>
+<li>
+<p>Add a <strong><code>FFSimulatorParticle</code></strong> component, assign the <code>FFGravityMap</code> created before, and select <code>Fluid</code> as the targeted texture channel.</p>
+</li>
+<li>
+<p>Instead of drawing to the <code>FFCanvas</code>, fluid-particles have to be added directly to the <code>FFSimulatorParticle</code> component, using <code>AddParticle</code> or <code>ProjectParticles</code>. Check out the <code>SimpleDrawParticle</code> component for a simple example.</p>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="drawing"><a class="header" href="#drawing">Drawing</a></h1>
+<p>In order to draw on a texture channel of a <code>FFCanvas</code> a set of extension methods for the <code>FFCanvas</code> are provided.
+There are currently two main approaches for drawing:</p>
+<ul>
+<li>
+<p><strong>Decal projection</strong>: a decal, defined by a <code>FFDecal</code>, is projected on the surfaces.
+The projection is defined by a projection-view matrix, similar to a camera, that describes a projection volume or frustum in world-space (<a href="https://docs.unity3d.com/ScriptReference/Matrix4x4.Perspective.html"><code>Matrix4x4.Perspective</code></a>).
+To project a decal on a <code>FFCanvas</code>, call the <code>ProjectDecal()</code> extension method.</p>
+</li>
+<li>
+<p><strong>Brushes</strong>: a brush is a 3D shape in the scene (e.g. a sphere) and the parts of the surfaces' renderers intersecting this shape are painted. How exactly the texture is painted is defined using a <code>FFBrush</code>. To draw a brush on a <code>FFCanvas</code>, call the <code>DrawSphere()</code>, <code>DrawDisc()</code>, or <code>DrawCapsule()</code> extension methods.</p>
+</li>
+</ul>
+<p>For example code snippets on how these methods can be used, take a look at <code>FluidFlow/Example/Scripts/DrawExamples.cs</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ffdecal"><a class="header" href="#ffdecal">FFDecal</a></h1>
+<p>A <code>FFDecal</code> allows drawing on multiple texture channels of a <code>FFCanvas</code> at once.
+Each decal channel is identified by the shader property name of the texture channel it affects.
+Additionally, setting the decal channel type to <code>FLUID</code> allows setting the fluid amount.
+Setting the type to <code>NORMAL</code> sets a flag internally, so normal maps are projected properly.</p>
+<p>The <code>FFDecal</code> also has an optional mask field.
+When the mask texture is left empty, no mask is applied.
+If a mask texture is set, all decal channels are affected by it.
+The R, G, B, and A buttons allow specifying which channels of the mask texture will be used for calculating the mask value.
+The mask value for each pixel is calculated by adding the values from the selected color channels, and dividing by the count of selected channels.</p>
+<p>For example, when selecting the green and alpha channel, the mask value <code>v = (Mask.g + Mask.a)/2</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ffbrush"><a class="header" href="#ffbrush">FFBrush</a></h1>
+<p>A <code>FFBrush</code> can currently only be used for drawing a solid color (triplanar texture mapping might be added in the future).
+By setting the brush type to FLUID, the fluid amount added can be specified.</p>
+<p>The drawing of a <code>FFBrush</code> is internally implemented as a distance function from an arbitrary 3D shape.
+When drawing a brush, a maximum distance is specified, and all pixels within this distance from the shape are colored.
+The fade value multiplied by this maximum distance defines the distance from the edge of the shape, where the intensity of the brush starts decreasing.
+And the intensity of the brush reaches zero, when the distance from the shape is equal to the maximum distance.
+The interpolation function is currently fixed to a smooth-step function, which has zero for its 1st- and 2nd-order derivatives at <code>x = 0</code> and <code>x = 1</code>.</p>
+<h2 id="custom-brush-shape"><a class="header" href="#custom-brush-shape">Custom Brush Shape</a></h2>
+<p>It is possible to add custom brush shapes, by creating a new method in the <code>FluidFlow/Scripts/Draw/BrushExtensions.cs</code>.
+This requires setting the required variables as global shader values, and writing a custom shader with the distance function of the shape.</p>
+<p>The <code>FluidFlow/Resources/InternalShader/Draw/CustomBrushTemplate.shader</code> provides a template for such a custom brush shader, which only requires you to fill in the distance function.
+To call this custom brush shader from C#, you can add a new <code>MaterialCache</code> to the other brush shaders in the <code>FluidFlow/Scripts/Draw/BrushExtensions.cs</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="custom-shaders"><a class="header" href="#custom-shaders">Custom Shaders</a></h1>
+<p>As the <code>FFCanvas</code> combines multiple renderers into a texture atlas, and some renderers might use the lightmapping UVs for drawing, a special material shader is required for displaying the generated textures on the models.
+Depending on the rendering pipeline used, unity's shader graph can be used, or a custom surface shader can be created.</p>
+<p>FluidFlow provides helper functions for both of these options.
+A set of custom shader graph nodes are defined in <code>FluidFlow/Editor/CustomShaderGraphNodes</code>, and the <code>FluidFlow/Shaders/FFShaderUtil.cginc</code> provides useful helper functions for writing surface shaders.
+Take a look at the included shaders, for an example of how these helper functions can be utilized.</p>
+<p>On initialization the <code>FFCanvas</code> will set a <code>Vector4</code>/<code>float4</code> uv transformation property <code>(scale.xy, offset.xy)</code> to each material of its <strong>Surfaces'</strong> renderers.
+Additional a keyword is enabled, of a float property set to <code>0</code>/<code>1</code>, if the mesh's secondary uv set should be used.
+The name of these properties/keyword can be set in the <strong>Material Property Overrides</strong> of the <code>FFCanvas</code>. </p>
+<p>Unity automatically creates a tiling and offset property for each texture property, however, depending on the shader implementation, the tiling and offset transformation may not be applied to the UV before sampling the texture.
+This <code>float4</code> property can accessed by adding a <code>_ST</code> postfix to the texture property name (e.g. <code>_MainTex</code> $\rightarrow$ <code>_MainTex_ST</code>).</p>
+<p>The function for transforming a <code>uv</code> coordinate to texture atlas coordinates of the <code>FFCanvas</code> given a <code>float4 uvTransform;</code> is:</p>
+<pre><code class="language-HLSL">float2 TransformUV(float2 uv, float4 uvTransform)
+{
+    return uv * uvTransform.xy + uvTransform.zw;
+}
+</code></pre>
+<h2 id="shader-graph"><a class="header" href="#shader-graph">Shader Graph</a></h2>
+<p>Accessing the <code>Tiling</code> and <code>Offset</code> of a texture in Shader Graph can be done using the <a href="https://docs.unity3d.com/Packages/com.unity.shadergraph@16.0/manual/Split-Texture-Transform-Node.html">Split Texture Transform Node</a>.
+On older versions of Shader Graph, you have to manually add a <code>float4</code> property named after the texture property + <code>_ST</code> postfix (e.g. <code>_FluidTex_ST</code>).</p>
+<p>If your meshes may use secondary/lightmap uvs, define a local multi compile boolean keyword e.g. <code>FF_UV1</code> or <code>float</code> property, for detecting if the secondary uv should be used.</p>
+<p>The helper <code>FF Atlas Transformed UV</code> node will automatically switch between <code>uv0</code> and <code>uv1</code>, depending on if the <code>Use Secondary UV</code> flag is set, and transform the uv using a provided transformation vector.
+For performing texture coordinate transformation manually, you can use the <code>FF Atlas Transform</code> helper node.</p>
+<p>When sampling a fluid texture, use the custom <code>FF Unpack Fluid</code> node, for easy access to the fluid's color, normal and fluid amount information.
+Optionally you can use the <code>FF Distort UV</code> node, to add a small random offset to the uv before sampling the fluid texture for a more natural look.</p>
+<p>The <code>FF Color Scatter</code> node approximates light scattering while traveling through the fluid, making sections with more fluid appear darker.</p>
+<h2 id="surface-shader"><a class="header" href="#surface-shader">Surface Shader</a></h2>
+<p>Overview of a basic surface shader with FluidFlow support:</p>
+<pre><code>Shader &quot;FluidFlow/MyCustomShader&quot;
+{
+	Properties
+	{
+		[...]
+		[HideInInspector] _FluidTex(&quot;Fluid&quot;, 2D) = &quot;black&quot; {}
+	}
+	SubShader
+	{
+		Tags { &quot;RenderType&quot; = &quot;Opaque&quot; }
+		LOD 200
+
+		CGPROGRAM
+		#include &quot;UnityCG.cginc&quot;
+		#include &quot;FFShaderUtil.cginc&quot;
+
+		#pragma target 3.0
+		#pragma surface surf Standard fullforwardshadows vertex:vert
+
+		#pragma multi_compile_local __ FF_UV1
+
+		struct Input
+		{
+			[...]            
+			FF_SURFACE_INPUT
+		};
+
+		sampler2D _FluidTex;
+		float4 _FluidTex_ST;
+
+		void vert(inout appdata_full v, out Input o) {
+			UNITY_INITIALIZE_OUTPUT(Input, o);
+			FF_INITIALIZE_OUTPUT(v, o, _FluidTex_ST);
+		}
+
+		void surf(Input IN, inout SurfaceOutputStandard o)
+		{
+            // basic shader stuff
+            float3 base_color = [...]
+            float3 base_normal = [...]
+            [...]
+
+            // sample fluid texture
+			fixed4 fluid = tex2D(_FluidTex, IN.FF_UV_NAME);
+			float3 fluid_color = fluid.FF_FLUID_COLOR;
+			float fluid_height = min(fluid.FF_FLUID_AMOUNT, 1);
+			float3 fluid_normal = FF_UNPACK_FLUID_NORMAL(IN, _FluidTex, 1);
+
+            // interpolate
+			o.Albedo = lerp(base_color, fluid_color, fluid_height);
+			o.Normal = lerp(base_normal, fluid_normal, fluid_height);
+		}
+		ENDCG
+	}
+	FallBack &quot;Diffuse&quot;
+}
+</code></pre>
+<p>In summary:</p>
+<ul>
+<li>
+<p>Add a <code>[HideInInspector] _FluidTex(&quot;Fluid&quot;, 2D) = &quot;black&quot; {}</code> property.</p>
+</li>
+<li>
+<p>Include <code>&quot;FFShaderUtil.cginc&quot;</code> (may require a relative path e.g. <code>#include &quot;../../FluidFlow/Shaders/FFShaderUtil.cginc&quot;</code>) for access to some utility functions.</p>
+</li>
+<li>
+<p>Create a local multi compile shader variant for using the secondary UV set (<code>#pragma multi_compile_local __ FF_UV1</code>).</p>
+</li>
+<li>
+<p>Add a custom vertex function, which initializes the <code>FF_SURFACE_INPUT</code> using the <code>FF_INITIALIZE_OUTPUT</code> macro. Alternatively you can use the <code>FFAtlasTransformUV()</code> function to transform UVs to <code>FFCanvas</code> texture atlas UVs manually.</p>
+</li>
+<li>
+<p>Inside the surface shader, you can now access the atlas transformed texture coordinate, via the <code>FF_UV_NAME</code> field on the input struct.
+This field was initialized by the <code>FF_INITIALIZE_OUTPUT</code> macro in the vertex shader.</p>
+</li>
+<li>
+<p>When sampling a fluid texture, you can use <code>.FF_FLUID_COLOR</code> (just an alias for <code>.rgb</code>) to access the color of the fluid, and <code>.FF_FLUID_AMOUNT</code> to access the fluid amount (just an alias for <code>.a</code>).</p>
+</li>
+<li>
+<p>Optionally you can use the <code>FFDistortUV</code> function, to add a small random offset to the uv before sampling the fluid texture for a more natural look.</p>
+</li>
+<li>
+<p>Use the <code>FF_UNPACK_FLUID_NORMAL</code> macro to approximate the fluid normal based on the surrounding fluid amount.</p>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ffcanvas"><a class="header" href="#ffcanvas">FFCanvas</a></h1>
+<p>The <code>FFCanvas</code> is the main component of FluidFlow.
+It manages the RenderTextures used for drawing, and sets up the renderers' materials for displaying the textures.</p>
+<p>In order for the drawing to work properly each mesh, that is being drawn on, requires a bijective UV map, meaning that there is a 1-to-1 mapping between the object's surface and its texture coordinates.
+Consequently, the UV islands must not overlap, and there should be at least a 2 pixel-wide gap between UV islands for the fluid simulation to work properly.</p>
+<p>If a models primary UV map does not fulfill these requirements, the secondary/lightmap UVs can be used instead.
+Unity can automatically generate such a secondary lightmap UVs, by enabling the <code>Generate Lightmap UVs</code> option, in the models import settings.
+However, it has to be noted that the 'quality' of automatically generated lightmap UVs is lower than a set of handcrafted UVs, as UV seams might be in very prominent places of the model.
+FluidFlow can deal with UV seams (see <code>FFEffects</code>/<code>FFSeamFixer</code>), but it is impossible to completely hide all artifacts from UV seams.
+Especially for fluid simulations, UV seams can be noticeable, as fluid has to be teleported between UV islands, and texel density will most likely change at the seam.</p>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<ul>
+<li><strong>Auto Initialize</strong>: initialize the <code>FFCanvas</code> automatically <code>OnStart()</code>.</li>
+<li><strong>Initialize Async</strong>: don't block the main thread if pre-processing of the meshes is requied. Check out <a href="components/../scriptable_object/ffmodelcache.html">FFModelCache</a> for faster initialization. </li>
+</ul>
+<h2 id="surfaces"><a class="header" href="#surfaces">Surfaces</a></h2>
+<p>The internal textures of a <code>FFCanvas</code> can be shared by multiple renderers and submeshes of these renderers.
+For each renderer in the <code>Surfaces</code> list, you can define which UV-set should be used for drawing.
+Additionally, you can define which subset of submeshes of the renderer is included in the <code>FFCanvas</code>, and define the section of the texture atlas the surface should occupy using the <code>UV Scale</code> and <code>UV Offset</code> properties.
+Optionally, you can assign different section for different sets of submeshes.
+In general, no UV-island should overlap any other UV-island, even of other submeshes/renderers.</p>
+<p>Click the <code>Open In Editor</code> button, for a visual editor for simpler layouting of the uv maps.</p>
+<h2 id="texture-channels"><a class="header" href="#texture-channels">Texture Channels</a></h2>
+<p>Each <strong>Texture Channel</strong> is internally represented by a <a href="https://docs.unity3d.com/ScriptReference/RenderTexture.html">RenderTexure</a>, and is directly (reference) or indirectly (name) identified using a <a href="components/../scriptable_objects/texture_channel.html"><code>TextureChannel</code></a> object.
+The <code>TextureChannel</code> also defines to which texture property of the <strong>Surfaces'</strong> materials the <code>RenderTexture</code> is applied to.</p>
+<p>The format of the internal <code>RenderTexture</code> is determined using a <a href="components/../scriptable_objects/texture_channel_format.html"><code>TextureChannelFormat</code></a> object.</p>
+<p>It is either initialized with a solid color, or by copying the contents of the current textures assigned to the renderers' materials.</p>
+<p>When the texture channels are initialized, they are assigned corresponding texture properties of the renderers using <a href="https://docs.unity3d.com/ScriptReference/MaterialPropertyBlock.html"><code>MaterialPropertyBlocks</code></a>.
+So do not be confused, if the textures do not show up in the material's inspector fields, as they are directly assigned to the renderers.</p>
+<h2 id="material-property-overrides"><a class="header" href="#material-property-overrides">Material Property Overrides</a></h2>
+<p>The <strong>Material Property Overrides</strong> define to which material properties the <code>UV Scale</code>, <code>UV Offset</code>, and selected UV set information is passed.</p>
+<ul>
+<li>
+<p><strong>Atlas Transform Propety</strong>: refers to a <code>float4</code> property encoded as (<code>UV_Scale</code>.xy, <code>UV_Offset</code>.xy). This is the same format as used for Unity's default texture tiling and offset property, accessed via the <code>_ST</code> postfix in the shader (e.g. <code>_MainTex_ST</code>).</p>
+</li>
+<li>
+<p><strong>Secondary UV Name</strong>: is either set as a keyword, if the secondary UV set is used, or a <code>float</code> property with the given name is set to <code>0</code>/<code>1</code>, depending on the UV set used.</p>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ffgravitymap"><a class="header" href="#ffgravitymap">FFGravityMap</a></h1>
+<p>The <code>FFGravityMap</code> is the base for the texture-/particle-based fluid simulation.</p>
+<p>It transform world-space gravity to UV-space gravity and saves it in an internal <code>RenderTexture</code>, which can be accessed via the <code>FlowTexture</code> property.</p>
+<p>The <code>FFGravityMap</code> is initialized automatically as soon as the targeted <code>FFCanvas</code> is fully initialized.</p>
+<h2 id="flow-texture-generation"><a class="header" href="#flow-texture-generation">Flow Texture Generation</a></h2>
+<p>The flow texture is updated lazily when the <code>FlowTexture</code> property is accessed, and an update is required.
+In the <code>CONTINUOUS</code> update mode, it is updated once per frame (upon request), and in <code>FIXED</code> mode after the set time in seconds.
+In the <code>CUSTOM</code> mode, you have to trigger updates manually using the <code>UpdateGravity()</code> method.</p>
+<p>Optionally, the gravity map generation can be influenced by a normal map (identified by a <code>Texture Channel</code>), and by random noise, which can be set to change over time, for less uniform flow.</p>
+<h3 id="fields-1"><a class="header" href="#fields-1">Fields</a></h3>
+<p>Check the tooltip hints for additional information of individual fields.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ffsimulator"><a class="header" href="#ffsimulator">FFSimulator</a></h1>
+<p>The <code>FFSimulator</code> provides a basic texture-based flow simulation, for a referenced <code>TextureChannel</code>.</p>
+<p><strong>Note</strong> that the <code>TextureChannelFormat</code> of the targeted <code>TextureChannel</code> should have 4 channels (RGBA) and support values &gt;1 (optimally floating point/HDR).</p>
+<p>The <code>FFSimulator</code> is initialized automatically as soon as the targeted <code>FFGravityMap</code> is fully initialized.</p>
+<h2 id="flow-speed"><a class="header" href="#flow-speed">Flow Speed</a></h2>
+<p>Each simulation step, fluid flow into/out of the current texel to the direct neighbors.
+Thus, the flow speed is directly dependent on the update frequency.</p>
+<p>As texel-density on the mesh can vary, the fluid can appear to flow faster/slower on parts of the mesh.</p>
+<h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
+<p>A timeout can be used to halt simulation after a specified amount of time after the last edit of the targeted <code>TextureChannel</code> in order to save computation cost.</p>
+<p>In general, the performance impact of the simulation is directly proportional to the <code>TextureChannel</code> resolution, and simulation update frequency.</p>
+<h3 id="fields-2"><a class="header" href="#fields-2">Fields</a></h3>
+<p>Check the tooltip hints for additional information of individual fields.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ffsimulatorparticle"><a class="header" href="#ffsimulatorparticle">FFSimulatorParticle</a></h1>
+<p>The <code>FFSimulatorParticle</code> provides a basic particle-based flow simulation.
+The Particle data is saved in two internal <code>RenderTextures</code> containing the particles' UV position, fluid amount, speed, and color.</p>
+<p>The <code>FFSimulatorParticle</code> is initialized automatically as soon as the targeted <code>FFGravityMap</code> is fully initialized.</p>
+<h2 id="flow-simulation"><a class="header" href="#flow-simulation">Flow Simulation</a></h2>
+<p>Each simulation step, the particles sample the <code>FFGravityMap</code>'s flow texture at their position and move in their corresponding 'down' direction.
+A small circle is then drawn for each active particle to the targeted <code>TextureChannel</code> of the <code>FFCanvas</code>.
+Over multiple update steps, this results in a trail as the particle is moving down the surface.</p>
+<h2 id="adding-particles-to-the-simulation"><a class="header" href="#adding-particles-to-the-simulation">Adding Particles to the Simulation</a></h2>
+<p>Compared the the <code>FFSimulator</code> particles have to be added to the <code>FFSimulatorParticle</code> directly instead of to a <code>FFCanvas</code> texture channel.</p>
+<p>The particle-data textures behave similar to a First-In-First-Out (FIFO) buffer, meaning that older active particles may be overwritten by newer ones, if the internal particle-data texture size is too small for the amount of particles you are adding.</p>
+<p>The next best section, new particles are added to, is determined in the <code>FFParticleUtil.Data.Request(Vector2Int size)</code> method.</p>
+<p>There are two approaches for introducing new particles to the simulation:</p>
+<ul>
+<li><code>ProjectParticles()</code>: project particles onto the renderer using a <code>FFProjector</code>. This renders the surfaces to a small section of the particles data <code>RenderTextures</code> using the projector's view-projection matrix. The UV coordinates of the rendered fragments within the projector's frustum are used as the new particles' starting position.</li>
+<li><code>AddParticles()</code>: define the position, fluid amount, speed, and color of the new particles, and upload it to the data-buffer texture. However, the particle's position is the UV position within the <code>FFCanvas</code> texture atlas, and thus non trivial to compute.
+<code>FFCanvasExtensions</code> contains two helper functions for computing these texture atlas UV positions (<code>AtlasTransformUV()</code>, <code>TryGetCanvasUV()</code>).</li>
+</ul>
+<p>Checkout <code>FluidFlow/Examples/Scripts/SimpleDrawParticle.cs</code> for basic examples of these two approaches.</p>
+<h2 id="flow-speed-1"><a class="header" href="#flow-speed-1">Flow Speed</a></h2>
+<p>Each simulation step, particles must only move one pixel, to ensure that they do not step into a different UV island.
+Thus, the flow speed is directly dependent on the update frequency.</p>
+<p>As texel-density on the mesh can vary, the particles can appear to move faster/slower on parts of the mesh.</p>
+<h2 id="performance-1"><a class="header" href="#performance-1">Performance</a></h2>
+<p>A timeout can be used to halt simulation after a specified amount of time after the last edit to the particles in order to save computation cost. You can reset the timeout manually using the <code>ResetTimeout()</code> method.</p>
+<p>In general, the performance impact of the simulation is proportional to the size of the particle data textures, and simulation update frequency.</p>
+<h3 id="fields-3"><a class="header" href="#fields-3">Fields</a></h3>
+<p>Check the tooltip hints for additional information of individual fields.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ffeffects"><a class="header" href="#ffeffects">FFEffects</a></h1>
+<p><code>FFEffects</code> provides some basic additional effects for the fluid simulation, to the targeted <code>TextureChannel</code> on the <code>FFCanvas</code> referenced by the <code>FFGravityMap</code>.</p>
+<h2 id="effects"><a class="header" href="#effects">Effects</a></h2>
+<ul>
+<li>
+<p><strong>Stitch Seams</strong>: the <code>FFSimulatorParticle</code> does not automatically deal with UV seam artifacts like the <code>FFSimulator</code>. 
+This option uses the <code>FFGravityMap's</code> flow texture for stitching the seams.
+This should be used instead of the <code>FFSeamFixer</code>, when a <code>FFGravityMap</code> is available.</p>
+</li>
+<li>
+<p><strong>Evaporation</strong>: reduce total fluid amount over time.</p>
+<ul>
+<li><code>LINEAR</code>: the same amount of fluid is removed each update</li>
+<li><code>EXPONENTIAL</code>: a fraction of the remaining fluid is removed each update</li>
+</ul>
+</li>
+<li>
+<p><strong>Blur</strong>: when a texel contains a lot of fluid, some will spread to surrounding texels containing less fluid.
+This can for example be useful for making fluid appear to soak into clothing.</p>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ffseamfixer"><a class="header" href="#ffseamfixer">FFSeamFixer</a></h1>
+<p>During rasterization, only pixels are drawn, which center points lie withing a triangle.
+This means, that pixels of the texture, which lie barely outside of an UV island, are not drawn during paining/decal projection, but can be visible during rendering of the model.
+This will be visible as artifacts at UV seams of the mesh.</p>
+<p>The <code>FFSeamFixer</code> solves this problem, by expanding the color at the border of the UV islands outwards a few pixels.</p>
+<p><em><strong>Note!</strong></em> when using fluid simulation, these seam artifacts are fixed for the fluid <code>TextureChannel</code> by the <code>FFSimulator</code> automatically, or <code>FFEffects</code> when using a <code>FFParticleSimulator</code></p>
+<h2 id="performance-2"><a class="header" href="#performance-2">Performance</a></h2>
+<p>The <code>FFSeamFixer</code> only fixes seams on targeted <code>Texture Channels</code> which have been marked as updated by the <code>FFCanvas</code>.
+You can manually mark a <code>Texture Channel</code> as modified by calling the <code>MarkModified(textureChannel);</code> method.</p>
+<p>When using the <code>CUSTOM</code> update mode, call the <code>FixModifiedChannels()</code> method, to trigger an update manually.</p>
+<h2 id="cache"><a class="header" href="#cache">Cache</a></h2>
+<p>For finding the UV islands' borders, the <code>Surfaces</code> have to be rendered to an internal <code>RenderTexture</code> first.
+The <code>Use Cache</code> field allows to cache this internal texture for future use, instead of regenerating it each update.
+This requires some memory on the GPU, but reduces drawcalls/overhead of fixing seam. </p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ffmodelcache"><a class="header" href="#ffmodelcache">FFModelCache</a></h1>
+<ul>
+<li><code>Assets/Create/Fluid Flow/Model Cache</code></li>
+</ul>
+<p>A <code>FFModelCache</code> allows to pregenerate and cache secondary UV transformation and stitching data, required for the gravity map generation and fluid simulation.
+This can reduce performance overhead and time needed for initializing a <code>FFCanvas</code>/<code>FFGravityMap</code>. </p>
+<p>After selecting a model asset in the <code>Project</code> window, navigate to <code>Assets/Create/Fluid Flow/Model Cache</code> to generate a cache asset for the selected model.
+When the <code>FFModelCache</code> is set up, hit the <code>Apply</code> button, to start generation and save the settings.</p>
+<h2 id="secondary-uv-caches"><a class="header" href="#secondary-uv-caches">Secondary UV Caches</a></h2>
+<p>When using secondary UV for fluid simulation, a UV1 to UV0 tangent-space transformation matrix has to be calculated for each vertex, so the gravity is projected to secondary-UV-space properly.
+Additionally, when approximating the fluid normal, this transformation is needed to transform the fluid normal back to UV0 tangent-space.</p>
+<p>Simply add a mesh to the <code>Secondary UV Caches</code> list, by clicking the <code>+</code> button.
+If the selected mesh does not have a secondary UV set, Unity's internal <a href="https://docs.unity3d.com/ScriptReference/Unwrapping.html">Unwrapping Utility</a> is used for automatically generating lightmap UVs.</p>
+<h2 id="stitch-caches"><a class="header" href="#stitch-caches">Stitch Caches</a></h2>
+<p>As fluid is simulated in UV space, seams in the UV unwrap would stop the flow.
+Therefore FluidFlow analyzes the meshes in a <code>FFCanvas</code> to find seams in the UV map, and generates 'stitches' for stitching UV islands together.</p>
+<p>Add a new entry, and set the desired mesh/UV-set, for which stitches should be pre-generated for.
+When <code>UV1</code> is selected, but the mesh does not have a secondary UV set, the mesh is automatically added to the <strong>Secondary UV Caches</strong>.</p>
+<h2 id="global-cache"><a class="header" href="#global-cache">Global Cache</a></h2>
+<p>The cached data from all loaded <code>FFModelCache</code> scriptable objects is loaded during the start of the game to a global cache manager internally.
+To ensure a <code>FFModelCache</code> is included in the build, it either has to be put in a 'Resources' folder in the project, or be referenced by an object in the scene.
+So in theory, a <code>FFModelCache</code> only has to be referenced once by a <code>FFCanvas</code>, and the cached data can still be accessed by all other <code>FFCanvas</code> components in the game.
+However, as a best practice, the <code>FFModelCache</code> should be referenced by all <code>FFCanvas</code> components which need to access the data, to make sure the <code>FFModelCache</code> is included in the final build.</p>
+<p>All mesh/stitch data generated at runtime is automatically also added to this global cache, so the same data is not compute multiple times.</p>
+<p>In the 'Global Settings' section, an update of all <code>FFModelCache</code> objects in the project can be triggered.
+This checks for each <code>FFModelCache</code> if the model it targets has been modified, and if so recalculates the cache.</p>
+<p>This updating of the caches can also be scheduled each time before entering the play mode, by enabling the 'Auto Update Before Play' toggle.
+However, please note that this adds an overhead to entering the play mode.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="texture-channel"><a class="header" href="#texture-channel">Texture Channel</a></h1>
+<ul>
+<li><code>Assets/Create/Fluid Flow/Texture Channel</code></li>
+</ul>
+<p>A <code>TextureChannel</code> abstracts away a shader's texture property name from the usage of the texture.
+For example a <code>Color</code> <code>TextureChannel</code> may correspond to the <code>_MainTex</code> texture property of one shader, but to the <code>_BaseMap</code> property of another shader.</p>
+<p>The name of a <code>TextureChannel</code> has to be unique within a project, as the name can be used for indirectly referencing a <code>TextureChannel</code> using <code>TextureChannel.TryResolve(&quot;name&quot;, out var textureChannel)</code>.</p>
+<p>A <code>TextureChannelReference</code> allows referencing a <code>TextureChannel</code> directly, or indirectly and resolving at runtime.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="texture-channel-format"><a class="header" href="#texture-channel-format">Texture Channel Format</a></h1>
+<ul>
+<li><code>Assets/Create/Fluid Flow/Texture Channel Format</code></li>
+</ul>
+<p>Provides a list of possible <a href="https://docs.unity3d.com/ScriptReference/Experimental.Rendering.GraphicsFormat.html"><code>GraphicsFormat</code></a> for a <strong>Texture Channel</strong> of a <code>FFCanvas</code>.</p>
+<p>On startup the first <code>GraphicsFormat</code> in the list available on the current platform is selected.</p>
+<p>If none from the list are available, similar compatible formats are searched.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="contact"><a class="header" href="#contact">Contact</a></h1>
+<p>Any questions or suggestions?</p>
+<ul>
+<li>Christian Schott</li>
+<li>E-Mail: <a href="mailto:mr3d.cs@gmail.com">mr3d.cs@gmail.com</a></li>
+<li>YouTube: <a href="https://www.youtube.com/playlist?list=PLH6XAuNbhBuukHLbeF1FId0-m2FzyJZiP">https://www.youtube.com/playlist?list=PLH6XAuNbhBuukHLbeF1FId0-m2FzyJZiP</a></li>
+<li>Unity AssetStore: <a href="https://assetstore.unity.com/publishers/16528">https://assetstore.unity.com/publishers/16528</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Custom Shaders - Fluid Flow</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="faq.html"><strong aria-hidden="true">1.1.</strong> Frequently Asked Questions</a></li><li class="chapter-item expanded "><a href="getting_started.html"><strong aria-hidden="true">1.2.</strong> Getting Started</a></li></ol></li><li class="chapter-item expanded "><a href="drawing.html"><strong aria-hidden="true">2.</strong> Drawing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="drawing_decal.html"><strong aria-hidden="true">2.1.</strong> FFDecal</a></li><li class="chapter-item expanded "><a href="drawing_brush.html"><strong aria-hidden="true">2.2.</strong> FFBrush</a></li></ol></li><li class="chapter-item expanded "><a href="custom_shaders.html" class="active"><strong aria-hidden="true">3.</strong> Custom Shaders</a></li><li class="chapter-item expanded affix "><li class="part-title">Components</li><li class="chapter-item expanded "><a href="components/ffcanvas.html"><strong aria-hidden="true">4.</strong> FFCanvas</a></li><li class="chapter-item expanded "><a href="components/ffgravitymap.html"><strong aria-hidden="true">5.</strong> FFGravityMap</a></li><li class="chapter-item expanded "><a href="components/ffsimulator.html"><strong aria-hidden="true">6.</strong> FFSimulator</a></li><li class="chapter-item expanded "><a href="components/ffsimulatorparticles.html"><strong aria-hidden="true">7.</strong> FFSimulatorParticle</a></li><li class="chapter-item expanded "><a href="components/ffeffects.html"><strong aria-hidden="true">8.</strong> FFEffects</a></li><li class="chapter-item expanded "><a href="components/ffseamfixer.html"><strong aria-hidden="true">9.</strong> FFSeamFixer</a></li><li class="chapter-item expanded affix "><li class="part-title">ScriptableObjects</li><li class="chapter-item expanded "><a href="scriptable_objects/ffmodelcache.html"><strong aria-hidden="true">10.</strong> FFModelCache</a></li><li class="chapter-item expanded "><a href="scriptable_objects/texture_channel.html"><strong aria-hidden="true">11.</strong> Texture Channel</a></li><li class="chapter-item expanded "><a href="scriptable_objects/texture_channel_format.html"><strong aria-hidden="true">12.</strong> Texture Channel Format</a></li><li class="chapter-item expanded affix "><a href="contact.html">Contact</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Fluid Flow</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="custom-shaders"><a class="header" href="#custom-shaders">Custom Shaders</a></h1>
+<p>As the <code>FFCanvas</code> combines multiple renderers into a texture atlas, and some renderers might use the lightmapping UVs for drawing, a special material shader is required for displaying the generated textures on the models.
+Depending on the rendering pipeline used, unity's shader graph can be used, or a custom surface shader can be created.</p>
+<p>FluidFlow provides helper functions for both of these options.
+A set of custom shader graph nodes are defined in <code>FluidFlow/Editor/CustomShaderGraphNodes</code>, and the <code>FluidFlow/Shaders/FFShaderUtil.cginc</code> provides useful helper functions for writing surface shaders.
+Take a look at the included shaders, for an example of how these helper functions can be utilized.</p>
+<p>On initialization the <code>FFCanvas</code> will set a <code>Vector4</code>/<code>float4</code> uv transformation property <code>(scale.xy, offset.xy)</code> to each material of its <strong>Surfaces'</strong> renderers.
+Additional a keyword is enabled, of a float property set to <code>0</code>/<code>1</code>, if the mesh's secondary uv set should be used.
+The name of these properties/keyword can be set in the <strong>Material Property Overrides</strong> of the <code>FFCanvas</code>. </p>
+<p>Unity automatically creates a tiling and offset property for each texture property, however, depending on the shader implementation, the tiling and offset transformation may not be applied to the UV before sampling the texture.
+This <code>float4</code> property can accessed by adding a <code>_ST</code> postfix to the texture property name (e.g. <code>_MainTex</code> $\rightarrow$ <code>_MainTex_ST</code>).</p>
+<p>The function for transforming a <code>uv</code> coordinate to texture atlas coordinates of the <code>FFCanvas</code> given a <code>float4 uvTransform;</code> is:</p>
+<pre><code class="language-HLSL">float2 TransformUV(float2 uv, float4 uvTransform)
+{
+    return uv * uvTransform.xy + uvTransform.zw;
+}
+</code></pre>
+<h2 id="shader-graph"><a class="header" href="#shader-graph">Shader Graph</a></h2>
+<p>Accessing the <code>Tiling</code> and <code>Offset</code> of a texture in Shader Graph can be done using the <a href="https://docs.unity3d.com/Packages/com.unity.shadergraph@16.0/manual/Split-Texture-Transform-Node.html">Split Texture Transform Node</a>.
+On older versions of Shader Graph, you have to manually add a <code>float4</code> property named after the texture property + <code>_ST</code> postfix (e.g. <code>_FluidTex_ST</code>).</p>
+<p>If your meshes may use secondary/lightmap uvs, define a local multi compile boolean keyword e.g. <code>FF_UV1</code> or <code>float</code> property, for detecting if the secondary uv should be used.</p>
+<p>The helper <code>FF Atlas Transformed UV</code> node will automatically switch between <code>uv0</code> and <code>uv1</code>, depending on if the <code>Use Secondary UV</code> flag is set, and transform the uv using a provided transformation vector.
+For performing texture coordinate transformation manually, you can use the <code>FF Atlas Transform</code> helper node.</p>
+<p>When sampling a fluid texture, use the custom <code>FF Unpack Fluid</code> node, for easy access to the fluid's color, normal and fluid amount information.
+Optionally you can use the <code>FF Distort UV</code> node, to add a small random offset to the uv before sampling the fluid texture for a more natural look.</p>
+<p>The <code>FF Color Scatter</code> node approximates light scattering while traveling through the fluid, making sections with more fluid appear darker.</p>
+<h2 id="surface-shader"><a class="header" href="#surface-shader">Surface Shader</a></h2>
+<p>Overview of a basic surface shader with FluidFlow support:</p>
+<pre><code>Shader &quot;FluidFlow/MyCustomShader&quot;
+{
+	Properties
+	{
+		[...]
+		[HideInInspector] _FluidTex(&quot;Fluid&quot;, 2D) = &quot;black&quot; {}
+	}
+	SubShader
+	{
+		Tags { &quot;RenderType&quot; = &quot;Opaque&quot; }
+		LOD 200
+
+		CGPROGRAM
+		#include &quot;UnityCG.cginc&quot;
+		#include &quot;FFShaderUtil.cginc&quot;
+
+		#pragma target 3.0
+		#pragma surface surf Standard fullforwardshadows vertex:vert
+
+		#pragma multi_compile_local __ FF_UV1
+
+		struct Input
+		{
+			[...]            
+			FF_SURFACE_INPUT
+		};
+
+		sampler2D _FluidTex;
+		float4 _FluidTex_ST;
+
+		void vert(inout appdata_full v, out Input o) {
+			UNITY_INITIALIZE_OUTPUT(Input, o);
+			FF_INITIALIZE_OUTPUT(v, o, _FluidTex_ST);
+		}
+
+		void surf(Input IN, inout SurfaceOutputStandard o)
+		{
+            // basic shader stuff
+            float3 base_color = [...]
+            float3 base_normal = [...]
+            [...]
+
+            // sample fluid texture
+			fixed4 fluid = tex2D(_FluidTex, IN.FF_UV_NAME);
+			float3 fluid_color = fluid.FF_FLUID_COLOR;
+			float fluid_height = min(fluid.FF_FLUID_AMOUNT, 1);
+			float3 fluid_normal = FF_UNPACK_FLUID_NORMAL(IN, _FluidTex, 1);
+
+            // interpolate
+			o.Albedo = lerp(base_color, fluid_color, fluid_height);
+			o.Normal = lerp(base_normal, fluid_normal, fluid_height);
+		}
+		ENDCG
+	}
+	FallBack &quot;Diffuse&quot;
+}
+</code></pre>
+<p>In summary:</p>
+<ul>
+<li>
+<p>Add a <code>[HideInInspector] _FluidTex(&quot;Fluid&quot;, 2D) = &quot;black&quot; {}</code> property.</p>
+</li>
+<li>
+<p>Include <code>&quot;FFShaderUtil.cginc&quot;</code> (may require a relative path e.g. <code>#include &quot;../../FluidFlow/Shaders/FFShaderUtil.cginc&quot;</code>) for access to some utility functions.</p>
+</li>
+<li>
+<p>Create a local multi compile shader variant for using the secondary UV set (<code>#pragma multi_compile_local __ FF_UV1</code>).</p>
+</li>
+<li>
+<p>Add a custom vertex function, which initializes the <code>FF_SURFACE_INPUT</code> using the <code>FF_INITIALIZE_OUTPUT</code> macro. Alternatively you can use the <code>FFAtlasTransformUV()</code> function to transform UVs to <code>FFCanvas</code> texture atlas UVs manually.</p>
+</li>
+<li>
+<p>Inside the surface shader, you can now access the atlas transformed texture coordinate, via the <code>FF_UV_NAME</code> field on the input struct.
+This field was initialized by the <code>FF_INITIALIZE_OUTPUT</code> macro in the vertex shader.</p>
+</li>
+<li>
+<p>When sampling a fluid texture, you can use <code>.FF_FLUID_COLOR</code> (just an alias for <code>.rgb</code>) to access the color of the fluid, and <code>.FF_FLUID_AMOUNT</code> to access the fluid amount (just an alias for <code>.a</code>).</p>
+</li>
+<li>
+<p>Optionally you can use the <code>FFDistortUV</code> function, to add a small random offset to the uv before sampling the fluid texture for a more natural look.</p>
+</li>
+<li>
+<p>Use the <code>FF_UNPACK_FLUID_NORMAL</code> macro to approximate the fluid normal based on the surrounding fluid amount.</p>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="drawing_brush.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="components/ffcanvas.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="drawing_brush.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="components/ffcanvas.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
