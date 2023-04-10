@@ -27,9 +27,9 @@ There are basic surface and shader graph shaders included. Alternatively, you ca
 
 ## Required Unity Packages
 
-- `Unity.Burst`
-- `Unity.Mathematics`
-
+- [`Mathematics` (`com.unity.mathematics`)](https://docs.unity3d.com/Packages/com.unity.mathematics@1.0/manual/index.html)
+- [`Collections` (`com.unity.collections`)](https://docs.unity3d.com/Packages/com.unity.collections@0.6/manual/index.html)
+- [`Burst` (`com.unity.burst`)](https://docs.unity3d.com/Packages/com.unity.burst@1.8/manual/index.html)
 
 ## Features
 
