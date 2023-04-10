@@ -1,6 +1,11 @@
 # Getting Started
 
-## A minimal example for setting up a `FFCanvas`:
+## Demo Scenes
+
+Example scenes using `FluidFlow` can be found in `FluidFlow/Example/Scenes`.
+Each example scene contains a `RP Material Switcher` object at the top of the `Hierarchy` which allows swapping the materials in the scene to match your current rendering pipeline.
+
+## A minimal example for setting up a `FFCanvas`
 
 - Add a `FFCanvas` component to an object in your scene.
 
@@ -18,7 +23,7 @@ Unity's default naming scheme for accessing the `Tiling` and `Offset` of a given
 
 - You should now be able to draw to the `FFCanvas` as described in [Drawing](./drawing.md). For testing you can simply add a `Simple Project Decal` component, and assign a camera and `FFCanvas`. This should allow you to project a decal onto the canvas by clicking on the objects in the `Game` window while playing.
 
-## Texture-based fluid simulation:
+## Texture-based fluid simulation
 
 - Add a `Fluid` texture channel using the `FluidFormat` and `BLACK` initialization to your `FFCanvas`.
 
@@ -32,7 +37,7 @@ FluidFlow provides example shaders for all rendering pipelines.
 - When paining to the `FFCanvas'` `Fluid` texture channel (using the `FLUID` type instead of `COLOR` while painting), the painted fluid should flow according to gravity.
 
 
-## Particle-based fluid simulation:
+## Particle-based fluid simulation
 
 - Add a `Fluid` texture channel using the `FluidFormat` and `BLACK` initialization to your `FFCanvas`.
 

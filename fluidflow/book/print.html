@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Fluid Flow</title>
+        <title>Fluid Flow v2.5</title>
         <meta name="robots" content="noindex" />
 
 
@@ -113,7 +113,7 @@
                         </button>
                     </div>
 
-                    <h1 class="menu-title">Fluid Flow</h1>
+                    <h1 class="menu-title">Fluid Flow v2.5</h1>
 
                     <div class="right-buttons">
                         <a href="print.html" title="Print this book" aria-label="Print this book">
@@ -227,7 +227,10 @@ Check the <code>SaveTextureChannel()</code> function in <code>Scripts/Extensions
 </li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h1>
-<h2 id="a-minimal-example-for-setting-up-a-ffcanvas"><a class="header" href="#a-minimal-example-for-setting-up-a-ffcanvas">A minimal example for setting up a <code>FFCanvas</code>:</a></h2>
+<h2 id="demo-scenes"><a class="header" href="#demo-scenes">Demo Scenes</a></h2>
+<p>Example scenes using <code>FluidFlow</code> can be found in <code>FluidFlow/Example/Scenes</code>.
+Each example scene contains a <code>RP Material Switcher</code> object at the top of the <code>Hierarchy</code> which allows swapping the materials in the scene to match your current rendering pipeline.</p>
+<h2 id="a-minimal-example-for-setting-up-a-ffcanvas"><a class="header" href="#a-minimal-example-for-setting-up-a-ffcanvas">A minimal example for setting up a <code>FFCanvas</code></a></h2>
 <ul>
 <li>
 <p>Add a <code>FFCanvas</code> component to an object in your scene.</p>
@@ -252,7 +255,7 @@ Unity's default naming scheme for accessing the <code>Tiling</code> and <code>Of
 <p>You should now be able to draw to the <code>FFCanvas</code> as described in <a href="./drawing.html">Drawing</a>. For testing you can simply add a <code>Simple Project Decal</code> component, and assign a camera and <code>FFCanvas</code>. This should allow you to project a decal onto the canvas by clicking on the objects in the <code>Game</code> window while playing.</p>
 </li>
 </ul>
-<h2 id="texture-based-fluid-simulation"><a class="header" href="#texture-based-fluid-simulation">Texture-based fluid simulation:</a></h2>
+<h2 id="texture-based-fluid-simulation"><a class="header" href="#texture-based-fluid-simulation">Texture-based fluid simulation</a></h2>
 <ul>
 <li>
 <p>Add a <code>Fluid</code> texture channel using the <code>FluidFormat</code> and <code>BLACK</code> initialization to your <code>FFCanvas</code>.</p>
@@ -271,7 +274,7 @@ FluidFlow provides example shaders for all rendering pipelines.</p>
 <p>When paining to the <code>FFCanvas'</code> <code>Fluid</code> texture channel (using the <code>FLUID</code> type instead of <code>COLOR</code> while painting), the painted fluid should flow according to gravity.</p>
 </li>
 </ul>
-<h2 id="particle-based-fluid-simulation"><a class="header" href="#particle-based-fluid-simulation">Particle-based fluid simulation:</a></h2>
+<h2 id="particle-based-fluid-simulation"><a class="header" href="#particle-based-fluid-simulation">Particle-based fluid simulation</a></h2>
 <ul>
 <li>
 <p>Add a <code>Fluid</code> texture channel using the <code>FluidFormat</code> and <code>BLACK</code> initialization to your <code>FFCanvas</code>.</p>
@@ -614,9 +617,9 @@ For example a <code>Color</code> <code>TextureChannel</code> may correspond to t
 <p>Any questions or suggestions?</p>
 <ul>
 <li>Christian Schott</li>
-<li>E-Mail: <a href="mailto:mr3d.cs@gmail.com">mr3d.cs@gmail.com</a></li>
-<li>YouTube: <a href="https://www.youtube.com/playlist?list=PLH6XAuNbhBuukHLbeF1FId0-m2FzyJZiP">https://www.youtube.com/playlist?list=PLH6XAuNbhBuukHLbeF1FId0-m2FzyJZiP</a></li>
-<li>Unity AssetStore: <a href="https://assetstore.unity.com/publishers/16528">https://assetstore.unity.com/publishers/16528</a></li>
+<li>E-Mail: mr3d.cs@gmail.com</li>
+<li>YouTube: https://www.youtube.com/playlist?list=PLH6XAuNbhBuukHLbeF1FId0-m2FzyJZiP</li>
+<li>Unity AssetStore: https://assetstore.unity.com/publishers/16528</li>
 </ul>
 
                     </main>
